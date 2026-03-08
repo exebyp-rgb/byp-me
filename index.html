@@ -1,12 +1,425 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BYP Landing</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BYP.me — Before You Pay</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --black: #080808;
+  --dark: #111111;
+  --card: #161616;
+  --gold: #c9a84c;
+  --gold-light: #e2c97e;
+  --gold-dim: #c9a84c33;
+  --white: #f5f0e8;
+  --grey: #6b6560;
+  --border: #c9a84c22;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--white); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 48px; display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(to bottom, rgba(8,8,8,0.97), transparent);
+}
+.nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 4px; color: var(--gold); }
+.nav-logo span { color: var(--white); opacity: 0.35; font-size: 11px; letter-spacing: 3px; font-family: 'DM Sans', sans-serif; margin-left: 6px; vertical-align: middle; }
+.nav-cta { background: var(--gold); color: var(--black); padding: 10px 24px; border-radius: 3px; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+.nav-cta:hover { background: var(--gold-light); }
+
+/* HERO */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+  padding: 130px 48px 80px; position: relative; overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 55% 45% at 65% 55%, #c9a84c09 0%, transparent 65%);
+}
+.hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 28px; font-weight: 500; }
+.hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(54px, 8.5vw, 110px); line-height: 0.93; letter-spacing: 1px; color: var(--white); }
+.hero-title .gold { color: var(--gold); }
+.hero-subtitle { font-family: 'Cormorant Garamond', serif; font-size: clamp(17px, 2vw, 22px); color: var(--grey); margin-top: 32px; max-width: 480px; line-height: 1.65; font-style: italic; }
+.hero-subtitle strong { color: var(--white); font-style: normal; font-weight: 600; }
+.hero-actions { display: flex; gap: 20px; margin-top: 44px; align-items: center; flex-wrap: wrap; }
+.btn-primary { background: var(--gold); color: var(--black); padding: 17px 38px; border-radius: 3px; font-weight: 700; font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; display: inline-block; }
+.btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 10px 32px #c9a84c2a; }
+.btn-ghost { color: var(--grey); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; border-bottom: 1px solid var(--border); padding-bottom: 2px; transition: color 0.2s; }
+.btn-ghost:hover { color: var(--gold); border-color: var(--gold); }
+
+/* PROOF BAR */
+.proof-bar {
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: 36px 48px; display: flex; justify-content: center; gap: 0;
+  flex-wrap: wrap; background: var(--dark);
+}
+.proof-item { text-align: center; padding: 0 52px; position: relative; }
+.proof-item + .proof-item::before { content: ''; position: absolute; left: 0; top: 8%; bottom: 8%; width: 1px; background: var(--border); }
+.proof-num { font-family: 'Barlow Condensed', sans-serif; font-size: 46px; font-weight: 700; color: var(--gold); letter-spacing: 0; line-height: 1; }
+.proof-label { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--grey); margin-top: 7px; font-weight: 400; }
+
+/* SECTIONS */
+section { padding: 96px 48px; max-width: 1100px; margin: 0 auto; }
+.section-tag { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 500; }
+.section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 4.5vw, 58px); line-height: 1; letter-spacing: 1.5px; margin-bottom: 20px; }
+.section-sub { font-family: 'Cormorant Garamond', serif; font-size: 19px; color: var(--grey); font-style: italic; max-width: 460px; line-height: 1.65; }
+
+/* HOW IT WORKS */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: var(--border); }
+.step { background: var(--dark); padding: 40px 32px; position: relative; overflow: hidden; transition: background 0.3s; }
+.step:hover { background: var(--card); }
+.step::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform 0.35s; transform-origin: left; }
+.step:hover::before { transform: scaleX(1); }
+.step-num { font-family: 'Bebas Neue', sans-serif; font-size: 68px; color: var(--gold); opacity: 0.10; line-height: 1; margin-bottom: 14px; }
+.step-icon { font-size: 26px; margin-bottom: 14px; }
+.step-title { font-family: 'Barlow Condensed', sans-serif; font-size: 21px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; color: var(--white); }
+.step-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--grey); line-height: 1.75; font-weight: 300; }
+
+/* PREVIEW */
+.preview-section { background: var(--dark); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 96px 48px; position: relative; overflow: hidden; }
+.preview-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 50% 60% at 80% 50%, #c9a84c07, transparent); pointer-events: none; }
+.preview-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; position: relative; }
+.mock-pdf { background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 32px 72px rgba(0,0,0,0.55), 0 0 0 1px rgba(201,168,76,0.18); transform: rotate(-1.2deg); transition: transform 0.4s; }
+.mock-pdf:hover { transform: rotate(0deg) scale(1.01); }
+.mock-top { background: #c9a84c; padding: 22px 26px; color: #080808; }
+.mock-biz { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; }
+.mock-trade { font-size: 10px; letter-spacing: 2px; margin-top: 3px; opacity: 0.65; text-transform: uppercase; }
+.mock-body { padding: 22px 26px; }
+.mock-label { font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: #94a3b8; margin-bottom: 5px; margin-top: 12px; }
+.mock-val { font-size: 13px; color: #1a202c; line-height: 1.5; }
+.mock-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 12px; color: #475569; }
+.mock-total { display: flex; justify-content: space-between; padding: 11px 0 0; margin-top: 6px; border-top: 2px solid #c9a84c; font-size: 17px; font-weight: 700; color: #c9a84c; }
+.mock-footer { background: #c9a84c; padding: 11px 26px; font-size: 10px; color: #080808; display: flex; justify-content: space-between; }
+
+/* TRADES */
+.trades-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: var(--border); }
+.trade-card { background: var(--dark); padding: 30px; transition: background 0.3s; }
+.trade-card:hover { background: var(--card); }
+.trade-icon { font-size: 28px; margin-bottom: 14px; }
+.trade-name { font-family: 'Barlow Condensed', sans-serif; font-size: 19px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--white); margin-bottom: 8px; }
+.trade-desc { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--grey); line-height: 1.7; font-weight: 300; }
+
+/* TESTIMONIALS */
+.testimonials { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 56px; background: var(--border); }
+.testimonial { background: var(--dark); padding: 34px; }
+.stars { color: var(--gold); font-size: 13px; margin-bottom: 18px; letter-spacing: 2px; }
+.quote-text { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; color: var(--white); line-height: 1.65; margin-bottom: 22px; }
+.quote-author { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); font-weight: 600; }
+.quote-trade { font-family: 'DM Sans', sans-serif; color: var(--grey); margin-top: 4px; font-size: 12px; font-weight: 300; }
+
+/* PRICING */
+.pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 56px; background: var(--border); }
+.price-card { background: var(--dark); padding: 44px 38px; position: relative; }
+.price-card.featured { background: var(--card); border-top: 2px solid var(--gold); }
+.price-badge { position: absolute; top: -1px; right: 28px; background: var(--gold); color: var(--black); font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; }
+.price-name { font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: var(--grey); margin-bottom: 20px; }
+.price-amount { font-family: 'Bebas Neue', sans-serif; font-size: 68px; color: var(--white); line-height: 1; letter-spacing: -1px; }
+.price-amount sup { font-size: 26px; vertical-align: top; margin-top: 10px; display: inline-block; }
+.price-period { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--grey); margin-top: 6px; margin-bottom: 28px; }
+.price-features { list-style: none; margin-bottom: 36px; }
+.price-features li { padding: 9px 0; border-bottom: 1px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--grey); display: flex; align-items: center; gap: 10px; font-weight: 300; }
+.price-features li::before { content: '—'; color: var(--gold); font-size: 11px; flex-shrink: 0; }
+.price-features li.active { color: var(--white); font-weight: 400; }
+.price-btn { display: block; text-align: center; padding: 15px; border-radius: 3px; font-weight: 700; font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase; text-decoration: none; transition: all 0.2s; }
+.price-btn.outlined { border: 1px solid var(--gold); color: var(--gold); }
+.price-btn.outlined:hover { background: var(--gold-dim); }
+.price-btn.solid { background: var(--gold); color: var(--black); }
+.price-btn.solid:hover { background: var(--gold-light); }
+
+/* CTA */
+.cta-section { text-align: center; padding: 120px 48px; position: relative; overflow: hidden; }
+.cta-section::before { content: 'BYP'; position: absolute; font-family: 'Bebas Neue', sans-serif; font-size: 380px; color: var(--gold); opacity: 0.025; top: 50%; left: 50%; transform: translate(-50%, -50%); letter-spacing: 20px; white-space: nowrap; pointer-events: none; }
+.cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 6.5vw, 80px); line-height: 0.95; letter-spacing: 2px; margin-bottom: 24px; position: relative; }
+.cta-sub { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: var(--grey); max-width: 440px; margin: 0 auto 44px; line-height: 1.6; position: relative; }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 36px 48px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+.footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 4px; color: var(--gold); }
+.footer-copy { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--grey); letter-spacing: 1px; }
+
+/* DIVIDER */
+hr.divider { border: none; height: 1px; background: var(--border); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .proof-bar { padding: 28px 20px; gap: 0; }
+  .proof-item { padding: 0 24px; }
+  section { padding: 60px 20px; }
+  .steps, .trades-grid, .testimonials { grid-template-columns: 1fr; }
+  .pricing-grid { grid-template-columns: 1fr; }
+  .preview-inner { grid-template-columns: 1fr; }
+  .preview-section { padding: 60px 20px; }
+  footer { flex-direction: column; text-align: center; padding: 28px 20px; }
+}
+</style>
 </head>
 <body>
-    <h1>Welcome to BYP</h1>
-    <p>This is the landing page.</p>
+
+<nav>
+  <div class="nav-logo">BYP<span>.ME</span></div>
+  <a href="#pricing" class="nav-cta">Start Free</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div style="position:relative;max-width:1100px;margin:0 auto;width:100%">
+    <div class="hero-eyebrow">Before You Pay · Professional Estimates for Trade Contractors</div>
+    <h1 class="hero-title">
+      YOUR WORK<br/>
+      IS <span class="gold">GREAT.</span><br/>
+      NOW YOUR<br/>
+      QUOTE IS TOO.
+    </h1>
+    <p class="hero-subtitle">
+      Send a <strong>professional estimate</strong> in under 2 minutes.<br/>
+      Win more jobs. Get paid what you're worth.
+    </p>
+    <div class="hero-actions">
+      <a href="#pricing" class="btn-primary">Create Your First Quote</a>
+      <a href="#how" class="btn-ghost">See how it works ↓</a>
+    </div>
+  </div>
+</div>
+
+<div class="proof-bar">
+  <div class="proof-item">
+    <div class="proof-num">2 MIN</div>
+    <div class="proof-label">To send a quote</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">3×</div>
+    <div class="proof-label">More jobs closed</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">$0</div>
+    <div class="proof-label">To start today</div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-num">4.9 ★</div>
+    <div class="proof-label">Contractor rating</div>
+  </div>
+</div>
+
+<section id="how">
+  <div class="reveal">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">THREE STEPS.<br/>ZERO HEADACHE.</h2>
+    <p class="section-sub">You do the work. We make sure you look like the pro you are.</p>
+  </div>
+  <div class="steps reveal">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-icon">✍️</div>
+      <div class="step-title">Describe the Job</div>
+      <p class="step-desc">Type what needs to be done — your way. No forms, no software training. Plain English works just fine.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-icon">⚡</div>
+      <div class="step-title">AI Builds Your Quote</div>
+      <p class="step-desc">AI structures a clean, professional estimate with your prices, your brand, and market-accurate line items.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-icon">📄</div>
+      <div class="step-title">You Approve &amp; Send</div>
+      <p class="step-desc">Review, hit approve, and send a branded PDF. Client sees a serious contractor. Not a text message with a number.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<div class="preview-section">
+  <div class="preview-inner">
+    <div class="reveal">
+      <div class="section-tag">Your Quote</div>
+      <h2 class="section-title">THIS IS WHAT<br/>YOUR CLIENT<br/><span style="color:var(--gold)">SEES.</span></h2>
+      <p class="section-sub" style="margin-bottom:28px;">A document that says: <em>I know what I'm doing. I stand behind my work. I'm not going anywhere.</em></p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:11px;">
+        <li style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--grey);font-family:'DM Sans',sans-serif"><span style="color:var(--gold)">—</span> Your logo &amp; business name</li>
+        <li style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--grey);font-family:'DM Sans',sans-serif"><span style="color:var(--gold)">—</span> Clear line items with prices</li>
+        <li style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--grey);font-family:'DM Sans',sans-serif"><span style="color:var(--gold)">—</span> Warranty &amp; payment terms</li>
+        <li style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--grey);font-family:'DM Sans',sans-serif"><span style="color:var(--gold)">—</span> Quote expiry — creates urgency</li>
+        <li style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--grey);font-family:'DM Sans',sans-serif"><span style="color:var(--gold)">—</span> License number &amp; insurance</li>
+      </ul>
+    </div>
+    <div class="mock-pdf reveal">
+      <div class="mock-top">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div>
+            <div class="mock-biz">MIKE'S ELECTRIC CO.</div>
+            <div class="mock-trade">Electrician · Lic #EC-48291 · Insured</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-family:'Bebas Neue';font-size:17px;letter-spacing:2px;">ESTIMATE</div>
+            <div style="font-size:10px;opacity:0.65">Q-004821</div>
+          </div>
+        </div>
+      </div>
+      <div class="mock-body">
+        <div class="mock-label">Prepared for</div>
+        <div class="mock-val"><strong>Johnson Family</strong><br/>4521 Oak Drive, Austin TX</div>
+        <div class="mock-label">Project</div>
+        <div class="mock-val">Panel upgrade + garage outlets + outdoor lighting</div>
+        <div style="margin-top:14px">
+          <div class="mock-line"><span>200A Panel Replacement</span><span style="font-weight:600;color:#1a202c">$1,850</span></div>
+          <div class="mock-line"><span>3× Garage Outlets</span><span style="font-weight:600;color:#1a202c">$240</span></div>
+          <div class="mock-line"><span>Outdoor LED Fixtures (2×)</span><span style="font-weight:600;color:#1a202c">$380</span></div>
+          <div class="mock-line"><span>Labor &amp; Materials</span><span style="font-weight:600;color:#1a202c">$520</span></div>
+        </div>
+        <div class="mock-total"><span>TOTAL</span><span>$3,219</span></div>
+        <div style="margin-top:14px;padding:10px 12px;background:#f8fafc;border-radius:5px;font-size:10px;color:#64748b;line-height:1.7">
+          🛡️ 1-year warranty on all labor &nbsp;·&nbsp; 💳 50% deposit to schedule &nbsp;·&nbsp; 📅 Valid 7 days
+        </div>
+      </div>
+      <div class="mock-footer">
+        <span>mike@mikeselectric.com</span>
+        <span>(512) 000-4821</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="reveal">
+    <div class="section-tag">Built For</div>
+    <h2 class="section-title">YOUR TRADE.<br/>YOUR BRAND.</h2>
+    <p class="section-sub">Whether you pull wire or pull permits — BYP makes you look like the business you are.</p>
+  </div>
+  <div class="trades-grid reveal">
+    <div class="trade-card">
+      <div class="trade-icon">⚡</div>
+      <div class="trade-name">Electricians</div>
+      <p class="trade-desc">Panel upgrades, rewires, service calls. Every job quoted with precision and confidence.</p>
+    </div>
+    <div class="trade-card">
+      <div class="trade-icon">🔧</div>
+      <div class="trade-name">Plumbers</div>
+      <p class="trade-desc">Water heaters, repiping, drain work. Stop guessing on prices — quote it right every time.</p>
+    </div>
+    <div class="trade-card">
+      <div class="trade-icon">❄️</div>
+      <div class="trade-name">HVAC</div>
+      <p class="trade-desc">Installs, tune-ups, replacements. Your estimates look as good as your work feels.</p>
+    </div>
+    <div class="trade-card">
+      <div class="trade-icon">🏗️</div>
+      <div class="trade-name">General Contractors</div>
+      <p class="trade-desc">Multi-trade projects need clean scopes. BYP keeps every bid clear and professional.</p>
+    </div>
+    <div class="trade-card">
+      <div class="trade-icon">🪚</div>
+      <div class="trade-name">Carpenters</div>
+      <p class="trade-desc">Custom builds, trim work, decks. Show clients exactly what they're getting before they pay.</p>
+    </div>
+    <div class="trade-card">
+      <div class="trade-icon">🎨</div>
+      <div class="trade-name">Painters</div>
+      <p class="trade-desc">Interior, exterior, commercial. Break down your quote so clients see the value — not just the number.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider"/>
+
+<section>
+  <div class="reveal">
+    <div class="section-tag">Real Contractors</div>
+    <h2 class="section-title">THEY STARTED<br/>WINNING MORE.</h2>
+  </div>
+  <div class="testimonials reveal">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="quote-text">"I used to text clients a number. Now I send a real quote. Closed 4 jobs in my first week using BYP."</p>
+      <div class="quote-author">Marcus T.</div>
+      <div class="quote-trade">Electrician · Dallas, TX</div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="quote-text">"Clients stop asking me to go lower when they see a professional document. The quote does the selling for me."</p>
+      <div class="quote-author">Dave R.</div>
+      <div class="quote-trade">Plumber · Phoenix, AZ</div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <p class="quote-text">"I'm proud to send my quotes now. My business finally looks as good as the work I put out."</p>
+      <div class="quote-author">Carlos M.</div>
+      <div class="quote-trade">HVAC Contractor · Miami, FL</div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing">
+  <div class="reveal" style="text-align:center;max-width:560px;margin:0 auto 56px">
+    <div class="section-tag">Pricing</div>
+    <h2 class="section-title">SIMPLE.<br/>FAIR. WORTH IT.</h2>
+    <p class="section-sub" style="margin:0 auto">One extra job closed pays for a full year. That's the math.</p>
+  </div>
+  <div class="pricing-grid reveal">
+    <div class="price-card">
+      <div class="price-name">Starter</div>
+      <div class="price-amount"><sup>$</sup>0</div>
+      <div class="price-period">Free forever · 5 quotes/month</div>
+      <ul class="price-features">
+        <li class="active">5 quotes per month</li>
+        <li class="active">3 design themes</li>
+        <li class="active">PDF download</li>
+        <li>Custom logo</li>
+        <li>AI price suggestions</li>
+        <li>Unlimited quotes</li>
+      </ul>
+      <a href="#" class="price-btn outlined">Get Started Free</a>
+    </div>
+    <div class="price-card featured">
+      <div class="price-badge">Most Popular</div>
+      <div class="price-name">Pro</div>
+      <div class="price-amount"><sup>$</sup>19</div>
+      <div class="price-period">per month · cancel anytime</div>
+      <ul class="price-features">
+        <li class="active">Unlimited quotes</li>
+        <li class="active">All 4 design themes</li>
+        <li class="active">PDF download</li>
+        <li class="active">Your logo &amp; branding</li>
+        <li class="active">AI price suggestions</li>
+        <li class="active">AI-written closing notes</li>
+      </ul>
+      <a href="#" class="price-btn solid">Start 7-Day Free Trial</a>
+    </div>
+  </div>
+  <p style="text-align:center;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grey);margin-top:22px;letter-spacing:2.5px;">NO CONTRACTS · NO SETUP FEES · CANCEL ANYTIME</p>
+</section>
+
+<div class="cta-section">
+  <div style="position:relative">
+    <h2 class="cta-title">YOUR NEXT CLIENT<br/>DESERVES A<br/><span style="color:var(--gold)">REAL QUOTE.</span></h2>
+    <p class="cta-sub">You built your skills over years. It's time your paperwork matched your reputation.</p>
+    <a href="#pricing" class="btn-primary">Create Your First Quote — Free</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">BYP.ME</div>
+  <div class="footer-copy">© 2025 BYP.me · Before You Pay · Built for Trade Contractors</div>
+  <div style="font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grey);letter-spacing:1px;">byp.me</div>
+</footer>
+
+<script>
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+reveals.forEach(r => observer.observe(r));
+</script>
 </body>
 </html>
