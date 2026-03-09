@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BYP.me — Create Quote</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#080808;--dark:#111111;--card:#161616;--gold:#c9a84c;--gold-light:#e2c97e;--gold-dim:#c9a84c22;--white:#f5f0e8;--grey:#6b6560;--border:#c9a84c22;--red:#e94560;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--black);color:var(--white);font-family:'DM Sans',sans-serif;min-height:100vh;}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,0.96);border-bottom:1px solid var(--border);padding:0 32px;height:60px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(12px);}
+.topbar-logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:var(--gold);text-decoration:none;}
+.topbar-logo span{color:var(--white);opacity:.3;font-size:10px;letter-spacing:3px;font-family:'DM Sans',sans-serif;margin-left:5px;vertical-align:middle;}
+.topbar-right{display:flex;align-items:center;gap:20px;}
+.user-name{font-size:13px;color:var(--grey);}
+.user-name strong{color:var(--white);font-weight:500;}
+.signout-btn{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--grey);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .2s;}
+.signout-btn:hover{color:var(--gold);}
+.app-wrap{display:grid;grid-template-columns:1fr 420px;min-height:100vh;padding-top:60px;}
+.form-panel{padding:40px 40px 80px;border-right:1px solid var(--border);}
+.panel-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;color:var(--white);margin-bottom:4px;}
+.panel-sub{font-size:13px;color:var(--grey);font-weight:300;margin-bottom:28px;}
+.form-section{margin-bottom:28px;}
+.section-label{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.field-row.single{grid-template-columns:1fr;}
+.field-row.triple{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--grey);font-weight:500;}
+.field input,.field textarea,.field select{background:var(--dark);border:1px solid #c9a84c1a;color:var(--white);padding:11px 14px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;width:100%;}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#c9a84c55;}
+.field input::placeholder,.field textarea::placeholder{color:#3a3530;}
+.field textarea{resize:vertical;min-height:80px;line-height:1.6;}
+.field select option{background:var(--dark);}
+.line-items{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.line-item{display:grid;grid-template-columns:1fr 100px 36px;gap:8px;align-items:center;}
+.line-item input{background:var(--dark);border:1px solid #c9a84c1a;color:var(--white);padding:10px 12px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.line-item input:focus{border-color:#c9a84c55;}
+.line-item input::placeholder{color:#3a3530;}
+.line-item input.price{text-align:right;font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;}
+.remove-line{background:none;border:1px solid #c9a84c15;color:var(--grey);width:36px;height:36px;border-radius:3px;cursor:pointer;font-size:18px;transition:all .2s;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.remove-line:hover{border-color:var(--red);color:var(--red);}
+.add-line-btn{background:none;border:1px dashed #c9a84c25;color:var(--grey);padding:10px;border-radius:3px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:2px;text-transform:uppercase;width:100%;transition:all .2s;margin-bottom:8px;}
+.add-line-btn:hover{border-color:var(--gold);color:var(--gold);}
+.total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-top:1px solid var(--border);}
+.total-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);}
+.total-amount{font-family:'Bebas Neue',sans-serif;font-size:32px;color:var(--gold);}
+.ai-btn{width:100%;padding:16px;background:var(--gold);color:var(--black);border:none;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:10px;}
+.ai-btn:hover:not(:disabled){background:var(--gold-light);}
+.ai-btn:disabled{opacity:.6;cursor:default;}
+.ai-badge{background:#080808;color:var(--gold);font-size:9px;letter-spacing:1px;padding:2px 6px;border-radius:2px;font-weight:700;}
+.ai-box{background:var(--card);border:1px solid var(--gold);border-radius:4px;padding:18px;margin-bottom:16px;display:none;}
+.ai-box.visible{display:block;}
+.ai-box-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;}
+.ai-suggestion{font-family:'Cormorant Garamond',serif;font-size:15px;font-style:italic;color:var(--white);line-height:1.65;margin-bottom:12px;}
+.ai-actions{display:flex;gap:8px;}
+.ai-apply{background:var(--gold);color:var(--black);border:none;padding:8px 16px;border-radius:3px;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.ai-dismiss{background:none;border:1px solid var(--border);color:var(--grey);padding:8px 14px;border-radius:3px;font-size:11px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.preview-panel{background:var(--dark);padding:40px 32px 80px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.preview-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;}
+.preview-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);}
+.download-btn{background:none;border:1px solid var(--gold);color:var(--gold);padding:9px 18px;border-radius:3px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .2s;}
+.download-btn:hover{background:var(--gold);color:var(--black);}
+.pdf-preview{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.5);color:#1a202c;}
+.pdf-top{background:#c9a84c;padding:24px 28px;}
+.pdf-biz-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#080808;}
+.pdf-biz-sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#080808;opacity:.65;margin-top:4px;}
+.pdf-top-row{display:flex;justify-content:space-between;align-items:flex-start;}
+.pdf-estimate-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#080808;text-align:right;}
+.pdf-num{font-size:10px;opacity:.6;text-align:right;margin-top:3px;}
+.pdf-body{padding:22px 28px;}
+.pdf-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.pdf-meta-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#94a3b8;margin-bottom:4px;}
+.pdf-meta-val{font-size:12px;color:#1a202c;line-height:1.5;font-weight:500;}
+.pdf-lines{border-top:1px solid #e2e8f0;}
+.pdf-line-header{display:grid;grid-template-columns:1fr 90px;gap:8px;padding:7px 0;border-bottom:1px solid #e2e8f0;}
+.pdf-line-header span{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#94a3b8;}
+.pdf-line-header span:last-child{text-align:right;}
+.pdf-line-row{display:grid;grid-template-columns:1fr 90px;gap:8px;padding:8px 0;border-bottom:1px solid #f1f5f9;}
+.pdf-line-desc{font-size:12px;color:#475569;}
+.pdf-line-price{font-size:13px;font-weight:600;color:#1a202c;text-align:right;font-family:'Barlow Condensed',sans-serif;}
+.pdf-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:2px solid #c9a84c;margin-top:6px;}
+.pdf-total-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#64748b;}
+.pdf-total-val{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#c9a84c;}
+.pdf-notes{margin-top:16px;padding:12px 14px;background:#f8fafc;border-radius:4px;font-size:11px;color:#64748b;line-height:1.7;font-style:italic;}
+.pdf-tagline{margin-top:12px;padding:10px 14px;background:#c9a84c10;border-left:2px solid #c9a84c;border-radius:2px;font-size:12px;color:#c9a84c;font-style:italic;font-family:'Cormorant Garamond',serif;display:none;}
+.pdf-footer{background:#c9a84c;padding:12px 28px;display:flex;justify-content:space-between;font-size:10px;color:#080808;}
+#loadScreen{position:fixed;inset:0;background:var(--black);z-index:999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+#loadScreen .logo{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:8px;color:var(--gold);}
+#loadScreen .load-sub{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--grey);}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.spinner{width:16px;height:16px;border:2px solid #08080840;border-top-color:#080808;border-radius:50%;animation:spin .7s linear infinite;}
+@media(max-width:900px){.app-wrap{grid-template-columns:1fr}.preview-panel{position:static;height:auto}.form-panel,.preview-panel{padding:24px 20px 40px}}
+</style>
+</head>
+<body>
+
+<div id="loadScreen">
+  <div class="logo">BYP</div>
+  <div class="load-sub">Loading your workspace...</div>
+</div>
+
+<nav class="topbar">
+  <a href="index.html" class="topbar-logo">BYP<span>.ME</span></a>
+  <div class="topbar-right">
+    <span class="user-name">Welcome, <strong id="userName">...</strong></span>
+    <button class="signout-btn" id="signoutBtn">Sign Out</button>
+  </div>
+</nav>
+
+<div class="app-wrap" id="appWrap" style="display:none">
+  <div class="form-panel">
+    <div class="panel-title">NEW QUOTE</div>
+    <div class="panel-sub">Fill in the details — preview updates live on the right</div>
+
+    <div class="form-section">
+      <div class="section-label">Your Business</div>
+      <div class="field-row">
+        <div class="field"><label>Business Name</label><input type="text" id="bizName" placeholder="Mike's Electric Co." oninput="updatePreview()"/></div>
+        <div class="field"><label>Trade</label><select id="bizTrade" onchange="updatePreview()"><option value="">Select trade...</option><option>Electrician</option><option>Plumber</option><option>HVAC Contractor</option><option>General Contractor</option><option>Carpenter</option><option>Painter</option><option>Roofer</option><option>Landscaper</option><option>Other</option></select></div>
+      </div>
+      <div class="field-row triple">
+        <div class="field"><label>License #</label><input type="text" id="bizLicense" placeholder="EC-48291" oninput="updatePreview()"/></div>
+        <div class="field"><label>Phone</label><input type="text" id="bizPhone" placeholder="(512) 000-0000" oninput="updatePreview()"/></div>
+        <div class="field"><label>Email</label><input type="email" id="bizEmail" placeholder="you@email.com" oninput="updatePreview()"/></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Client</div>
+      <div class="field-row">
+        <div class="field"><label>Client Name</label><input type="text" id="clientName" placeholder="Johnson Family" oninput="updatePreview()"/></div>
+        <div class="field"><label>Address</label><input type="text" id="clientAddress" placeholder="4521 Oak Drive, Austin TX" oninput="updatePreview()"/></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Project</div>
+      <div class="field-row single">
+        <div class="field"><label>Describe the work</label><textarea id="projectDesc" placeholder="Panel upgrade + garage outlets + outdoor lighting..." oninput="updatePreview()"></textarea></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Line Items</div>
+      <div class="line-items" id="lineItems"></div>
+      <button class="add-line-btn" onclick="addLine()">+ Add Line Item</button>
+      <div class="total-row">
+        <span class="total-label">Total</span>
+        <span class="total-amount" id="totalDisplay">$0</span>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">Terms</div>
+      <div class="field-row triple">
+        <div class="field"><label>Deposit</label><input type="text" id="deposit" placeholder="50%" oninput="updatePreview()"/></div>
+        <div class="field"><label>Valid for</label><input type="text" id="validity" placeholder="7 days" oninput="updatePreview()"/></div>
+        <div class="field"><label>Warranty</label><input type="text" id="warranty" placeholder="1 year labor" oninput="updatePreview()"/></div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <div class="section-label">AI Enhancement</div>
+      <div class="ai-box" id="aiBox">
+        <div class="ai-box-title">✦ AI Suggestion</div>
+        <div class="ai-suggestion" id="aiSuggestion"></div>
+        <div class="ai-actions">
+          <button class="ai-apply" onclick="applyAI()">Apply to Quote</button>
+          <button class="ai-dismiss" onclick="dismissAI()">Dismiss</button>
+        </div>
+      </div>
+      <button class="ai-btn" id="aiBtn" onclick="runAI()">
+        <span class="ai-badge">AI</span>
+        Enhance My Quote
+      </button>
+    </div>
+  </div>
+
+  <div class="preview-panel">
+    <div class="preview-header">
+      <div class="preview-title">Live Preview</div>
+      <button class="download-btn" onclick="downloadPDF()">⬇ Download PDF</button>
+    </div>
+    <div class="pdf-preview" id="pdfPreview">
+      <div class="pdf-top">
+        <div class="pdf-top-row">
+          <div><div class="pdf-biz-name" id="p-bizName">YOUR BUSINESS</div><div class="pdf-biz-sub" id="p-bizSub">Your Trade · Licensed & Insured</div></div>
+          <div><div class="pdf-estimate-label">ESTIMATE</div><div class="pdf-num" id="p-quoteNum">Q-000001</div></div>
+        </div>
+      </div>
+      <div class="pdf-body">
+        <div class="pdf-meta">
+          <div><div class="pdf-meta-label">Prepared for</div><div class="pdf-meta-val" id="p-client">Client Name<br/>Address</div></div>
+          <div><div class="pdf-meta-label">Project</div><div class="pdf-meta-val" id="p-project">Project description</div></div>
+        </div>
+        <div class="pdf-lines">
+          <div class="pdf-line-header"><span>Description</span><span>Amount</span></div>
+          <div id="p-lines"></div>
+        </div>
+        <div class="pdf-total-row">
+          <span class="pdf-total-label">Total</span>
+          <span class="pdf-total-val" id="p-total">$0</span>
+        </div>
+        <div class="pdf-notes" id="p-notes">💳 50% deposit · 📅 Valid 7 days · 🛡️ 1-year warranty</div>
+        <div class="pdf-tagline" id="p-tagline"></div>
+      </div>
+      <div class="pdf-footer"><span id="p-email">your@email.com</span><span id="p-phone">your phone</span></div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+const app = initializeApp({apiKey:"AIzaSyCKR0f8od3fWcl_FhPE9Pe9f1V8_bxcINc",authDomain:"byp-me.firebaseapp.com",projectId:"byp-me",storageBucket:"byp-me.firebasestorage.app",messagingSenderId:"479772888073",appId:"1:479772888073:web:825ff0aa4b4da1efac3cd8"});
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+  document.getElementById('loadScreen').style.display = 'none';
+  if (!user) { window.location.href = 'byp-login.html'; return; }
+  document.getElementById('userName').textContent = (user.displayName||user.email).split(' ')[0];
+  document.getElementById('appWrap').style.display = 'grid';
+  initApp();
+});
+document.getElementById('signoutBtn').addEventListener('click', () => signOut(auth).then(() => window.location.href = 'byp-login.html'));
+</script>
+
+<script>
+let lineCount = 0, aiTagline = '', aiClosing = '';
+const quoteNum = Math.floor(Math.random()*90000)+10000;
+
+function initApp() {
+  document.getElementById('p-quoteNum').textContent = 'Q-0' + quoteNum;
+  addLine('200A Panel Replacement','1850');
+  addLine('Labor & Materials','520');
+  updatePreview();
+}
+
+function addLine(desc='', price='') {
+  lineCount++;
+  const id = lineCount;
+  const row = document.createElement('div');
+  row.className = 'line-item'; row.id = 'line-'+id;
+  row.innerHTML = `<input type="text" placeholder="Description..." value="${desc}" oninput="updatePreview()"/><input type="text" placeholder="$0" value="${price?'$'+Number(price).toLocaleString():''}" class="price" oninput="updatePreview()" onfocus="this.value=this.value.replace(/[$,]/g,'')" onblur="formatPrice(this)"/><button class="remove-line" onclick="removeLine(${id})">×</button>`;
+  document.getElementById('lineItems').appendChild(row);
+  updatePreview();
+}
+
+function removeLine(id) { const el=document.getElementById('line-'+id); if(el){el.remove();updatePreview();} }
+
+function formatPrice(el) {
+  const n = parseFloat(el.value.replace(/[^0-9.]/g,''));
+  if(!isNaN(n)&&n>0) el.value='$'+n.toLocaleString();
+  updatePreview();
+}
+
+function getTotal() {
+  let t=0;
+  document.querySelectorAll('.line-item .price').forEach(i=>{const v=parseFloat(i.value.replace(/[^0-9.]/g,''));if(!isNaN(v))t+=v;});
+  return t;
+}
+
+function getLines() {
+  const lines=[];
+  document.querySelectorAll('.line-item').forEach(r=>{
+    const ins=r.querySelectorAll('input');
+    const desc=ins[0].value.trim();
+    const price=parseFloat(ins[1].value.replace(/[^0-9.]/g,''));
+    if(desc||price) lines.push({desc,price:isNaN(price)?0:price});
+  });
+  return lines;
+}
+
+function updatePreview() {
+  const biz=document.getElementById('bizName').value||'YOUR BUSINESS';
+  const trade=document.getElementById('bizTrade').value||'Contractor';
+  const lic=document.getElementById('bizLicense').value;
+  const phone=document.getElementById('bizPhone').value||'your phone';
+  const email=document.getElementById('bizEmail').value||'your@email.com';
+  const client=document.getElementById('clientName').value||'Client Name';
+  const addr=document.getElementById('clientAddress').value||'Address';
+  const proj=document.getElementById('projectDesc').value||'Project description';
+  const dep=document.getElementById('deposit').value||'50%';
+  const val=document.getElementById('validity').value||'7 days';
+  const war=document.getElementById('warranty').value||'1 year labor';
+
+  document.getElementById('p-bizName').textContent=biz.toUpperCase();
+  document.getElementById('p-bizSub').textContent=trade+(lic?' · Lic #'+lic:'')+' · Licensed & Insured';
+  document.getElementById('p-client').innerHTML=`<strong>${client}</strong><br/>${addr}`;
+  document.getElementById('p-project').textContent=proj;
+  document.getElementById('p-phone').textContent=phone;
+  document.getElementById('p-email').textContent=email;
+
+  let html='';
+  getLines().forEach(l=>{html+=`<div class="pdf-line-row"><span class="pdf-line-desc">${l.desc}</span><span class="pdf-line-price">$${l.price.toLocaleString()}</span></div>`;});
+  document.getElementById('p-lines').innerHTML=html;
+
+  const total=getTotal();
+  document.getElementById('p-total').textContent='$'+total.toLocaleString();
+  document.getElementById('totalDisplay').textContent='$'+total.toLocaleString();
+  document.getElementById('p-notes').textContent=`💳 ${dep} deposit  📅 Valid ${val}  🛡️ ${war} warranty`;
+
+  const tl=document.getElementById('p-tagline');
+  if(aiTagline){tl.textContent='"'+aiTagline+'"';tl.style.display='block';}else{tl.style.display='none';}
+}
+
+async function runAI() {
+  const proj=document.getElementById('projectDesc').value;
+  const lines=getLines();
+  if(!proj&&!lines.length){alert('Add a project description first.');return;}
+  const btn=document.getElementById('aiBtn');
+  btn.disabled=true;
+  btn.innerHTML=`<div class="spinner"></div> AI is thinking...`;
+  const prompt=`You are helping a trade contractor write a professional quote.
+Trade: ${document.getElementById('bizTrade').value||'Contractor'}
+Project: ${proj||'General work'}
+Line items: ${lines.map(l=>l.desc+' $'+l.price).join(', ')}
+Total: $${getTotal()}
+
+Give TWO things:
+1. A short confident tagline for this contractor (1 sentence, no fluff)
+2. A closing note for the quote (1-2 sentences, builds trust, creates mild urgency)
+
+Respond ONLY in this JSON format with no extra text:
+{"tagline":"...","closing":"..."}`;
+  try {
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,messages:[{role:'user',content:prompt}]})});
+    const data=await res.json();
+    const json=JSON.parse(data.content[0].text.replace(/```json|```/g,'').trim());
+    aiTagline=json.tagline||''; aiClosing=json.closing||'';
+  } catch(e) {
+    aiTagline='Licensed, insured, and built on reputation — your job done right.';
+    aiClosing='This quote is valid for 7 days. We take limited projects each month — contact us to secure your spot.';
+  }
+  document.getElementById('aiSuggestion').innerHTML=`<strong>Tagline:</strong> "${aiTagline}"<br/><br/><strong>Closing:</strong> ${aiClosing}`;
+  document.getElementById('aiBox').classList.add('visible');
+  btn.disabled=false;
+  btn.innerHTML=`<span class="ai-badge">AI</span> Enhance My Quote`;
+}
+
+function applyAI(){updatePreview();document.getElementById('aiBox').classList.remove('visible');}
+function dismissAI(){aiTagline='';aiClosing='';document.getElementById('aiBox').classList.remove('visible');updatePreview();}
+
+function downloadPDF(){
+  const biz=document.getElementById('bizName').value||'Quote';
+  const css=`<style>body{margin:0;font-family:Arial,sans-serif;}.pdf-preview{max-width:700px;margin:0 auto;background:#fff;}.pdf-top{background:#c9a84c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:24px 28px;}.pdf-biz-name{font-size:26px;font-weight:900;letter-spacing:3px;color:#080808;text-transform:uppercase;}.pdf-biz-sub{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#080808;opacity:.65;margin-top:4px;}.pdf-top-row{display:flex;justify-content:space-between;align-items:flex-start;}.pdf-estimate-label{font-size:18px;font-weight:900;letter-spacing:2px;color:#080808;text-align:right;}.pdf-num{font-size:10px;opacity:.6;text-align:right;margin-top:3px;}.pdf-body{padding:22px 28px;}.pdf-meta{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}.pdf-meta-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#94a3b8;margin-bottom:4px;}.pdf-meta-val{font-size:12px;color:#1a202c;line-height:1.5;font-weight:500;}.pdf-lines{border-top:1px solid #e2e8f0;}.pdf-line-header{display:grid;grid-template-columns:1fr 90px;gap:8px;padding:7px 0;border-bottom:1px solid #e2e8f0;}.pdf-line-header span{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#94a3b8;}.pdf-line-header span:last-child{text-align:right;}.pdf-line-row{display:grid;grid-template-columns:1fr 90px;gap:8px;padding:8px 0;border-bottom:1px solid #f1f5f9;}.pdf-line-desc{font-size:12px;color:#475569;}.pdf-line-price{font-size:13px;font-weight:600;color:#1a202c;text-align:right;}.pdf-total-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:2px solid #c9a84c;margin-top:6px;}.pdf-total-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:#64748b;}.pdf-total-val{font-size:26px;font-weight:900;color:#c9a84c;}.pdf-notes{margin-top:16px;padding:12px 14px;background:#f8fafc;border-radius:4px;font-size:11px;color:#64748b;line-height:1.7;}.pdf-tagline{margin-top:12px;padding:10px 14px;background:#c9a84c10;border-left:2px solid #c9a84c;font-size:12px;color:#c9a84c;font-style:italic;}.pdf-footer{background:#c9a84c!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:12px 28px;display:flex;justify-content:space-between;font-size:10px;color:#080808;}</style>`;
+  const win=window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head><title>${biz} — Estimate</title>${css}</head><body>${document.getElementById('pdfPreview').outerHTML}<script>window.onload=()=>window.print()<\/script></body></html>`);
+  win.document.close();
+}
+
+window.addLine=addLine; window.removeLine=removeLine; window.updatePreview=updatePreview;
+window.formatPrice=formatPrice; window.runAI=runAI; window.applyAI=applyAI;
+window.dismissAI=dismissAI; window.downloadPDF=downloadPDF;
+</script>
+</body>
+</html>
