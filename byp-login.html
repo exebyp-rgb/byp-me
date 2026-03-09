@@ -1,15 +1,191 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Login</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>BYP.me — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital@1&family=DM+Sans:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body { font-family: 'DM Sans', sans-serif; background: #080808; color: #f5f0e8; display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
+.left { position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 48px; border-right: 1px solid #c9a84c22; overflow: hidden; }
+.left-bg { position: absolute; inset: 0; background: radial-gradient(ellipse 70% 50% at 20% 60%, #c9a84c0b 0%, transparent 60%); pointer-events: none; }
+.left-watermark { position: absolute; bottom: -40px; left: -20px; font-family: 'Bebas Neue', sans-serif; font-size: 280px; color: #c9a84c; opacity: 0.04; letter-spacing: 8px; line-height: 1; pointer-events: none; user-select: none; }
+.logo { position: relative; font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 4px; color: #c9a84c; text-decoration: none; }
+.logo span { color: #f5f0e8; opacity: 0.3; font-size: 11px; letter-spacing: 3px; font-family: 'DM Sans', sans-serif; margin-left: 6px; vertical-align: middle; }
+.left-main { position: relative; }
+.left-eyebrow { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: #c9a84c; margin-bottom: 20px; font-weight: 500; }
+.left-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(44px, 5.5vw, 72px); line-height: 0.93; letter-spacing: 1px; color: #f5f0e8; margin-bottom: 28px; }
+.left-title .gold { color: #c9a84c; }
+.left-quote { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-style: italic; color: #6b6560; line-height: 1.65; max-width: 360px; padding-left: 16px; border-left: 2px solid #c9a84c44; }
+.left-stats { position: relative; display: flex; gap: 0; border-top: 1px solid #c9a84c22; padding-top: 28px; }
+.stat { flex: 1; padding-right: 24px; border-right: 1px solid #c9a84c22; margin-right: 24px; }
+.stat:last-child { border-right: none; margin-right: 0; padding-right: 0; }
+.stat-num { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 700; color: #c9a84c; line-height: 1; }
+.stat-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: #6b6560; margin-top: 5px; }
+.right { display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 48px; background: #0d0d0d; }
+.login-box { width: 100%; max-width: 400px; }
+.login-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; color: #f5f0e8; margin-bottom: 8px; }
+.login-sub { font-size: 14px; color: #6b6560; margin-bottom: 40px; line-height: 1.6; font-weight: 300; }
+.google-btn { display: flex; align-items: center; justify-content: center; gap: 14px; width: 100%; padding: 17px 24px; background: #f5f0e8; color: #1a1a1a; border: none; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-bottom: 16px; }
+.google-btn:hover { background: #ffffff; transform: translateY(-2px); box-shadow: 0 12px 32px rgba(245,240,232,0.12); }
+.google-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+.google-icon { width: 20px; height: 20px; flex-shrink: 0; }
+.divider-line { display: flex; align-items: center; gap: 14px; margin: 24px 0; }
+.divider-line::before, .divider-line::after { content: ''; flex: 1; height: 1px; background: #c9a84c22; }
+.divider-line span { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #6b6560; }
+.email-field { width: 100%; background: #161616; border: 1px solid #c9a84c22; color: #f5f0e8; padding: 14px 18px; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 14px; outline: none; transition: border-color 0.2s; margin-bottom: 12px; }
+.email-field::placeholder { color: #6b6560; }
+.email-field:focus { border-color: #c9a84c66; }
+.email-btn { width: 100%; padding: 15px; background: transparent; border: 1px solid #c9a84c; color: #c9a84c; border-radius: 4px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; }
+.email-btn:hover:not(:disabled) { background: #c9a84c15; }
+.email-btn:disabled { opacity: 0.7; cursor: default; }
+.error-msg { color: #e94560; font-size: 12px; margin-top: 10px; display: none; padding: 10px 14px; background: #e9456010; border-radius: 4px; border-left: 2px solid #e94560; }
+.trust { margin-top: 32px; padding-top: 28px; border-top: 1px solid #c9a84c15; display: flex; flex-direction: column; gap: 10px; }
+.trust-item { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #6b6560; font-weight: 300; }
+.trust-item::before { content: '—'; color: #c9a84c; font-size: 11px; flex-shrink: 0; }
+.terms { margin-top: 28px; font-size: 11px; color: #4a4540; line-height: 1.6; text-align: center; }
+.terms a { color: #6b6560; text-decoration: underline; text-underline-offset: 2px; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.login-box > * { animation: fadeUp 0.5s ease forwards; opacity: 0; }
+.login-box > *:nth-child(1) { animation-delay: 0.10s; }
+.login-box > *:nth-child(2) { animation-delay: 0.18s; }
+.login-box > *:nth-child(3) { animation-delay: 0.26s; }
+.login-box > *:nth-child(4) { animation-delay: 0.32s; }
+.login-box > *:nth-child(5) { animation-delay: 0.38s; }
+.login-box > *:nth-child(6) { animation-delay: 0.44s; }
+.login-box > *:nth-child(7) { animation-delay: 0.50s; }
+.login-box > *:nth-child(8) { animation-delay: 0.56s; }
+.logo, .left-main, .left-stats { animation: fadeUp 0.6s ease forwards; opacity: 0; }
+.logo { animation-delay: 0.05s; }
+.left-main { animation-delay: 0.15s; }
+.left-stats { animation-delay: 0.28s; }
+@media (max-width: 768px) {
+  body { grid-template-columns: 1fr; }
+  .left { display: none; }
+  .right { padding: 40px 24px; min-height: 100vh; }
+}
+</style>
 </head>
 <body>
-    <h1>Login</h1>
-    <form>
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Login">
-    </form>
+
+<div class="left">
+  <div class="left-bg"></div>
+  <div class="left-watermark">BYP</div>
+  <a href="index.html" class="logo">BYP<span>.ME</span></a>
+  <div class="left-main">
+    <div class="left-eyebrow">Before You Pay</div>
+    <h1 class="left-title">LOOK LIKE<br/>THE PRO<br/>YOU <span class="gold">ARE.</span></h1>
+    <p class="left-quote">
+      "My business finally looks as good as the work I put out."<br/>
+      <span style="font-size:13px;font-style:normal;color:#c9a84c;letter-spacing:2px;font-family:'DM Sans',sans-serif">— Carlos M., HVAC · Miami</span>
+    </p>
+  </div>
+  <div class="left-stats">
+    <div class="stat"><div class="stat-num">2 MIN</div><div class="stat-label">Per quote</div></div>
+    <div class="stat"><div class="stat-num">3×</div><div class="stat-label">More closes</div></div>
+    <div class="stat"><div class="stat-num">$0</div><div class="stat-label">To start</div></div>
+  </div>
+</div>
+
+<div class="right">
+  <div class="login-box">
+    <div class="login-title">GET STARTED</div>
+    <p class="login-sub">Free account · No credit card · 5 quotes included</p>
+
+    <button class="google-btn" id="googleBtn">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div id="errorMsg" class="error-msg"></div>
+    <div class="divider-line"><span>or</span></div>
+    <input class="email-field" type="email" placeholder="your@email.com" id="emailInput"/>
+    <button class="email-btn" id="emailBtn">Send Magic Link →</button>
+
+    <div class="trust">
+      <div class="trust-item">No password needed</div>
+      <div class="trust-item">5 free quotes, no card required</div>
+      <div class="trust-item">Cancel anytime, zero friction</div>
+    </div>
+    <p class="terms">By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a></p>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+import { getAuth, signInWithPopup, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCKR0f8od3fWcl_FhPE9Pe9f1V8_bxcINc",
+  authDomain: "byp-me.firebaseapp.com",
+  projectId: "byp-me",
+  storageBucket: "byp-me.firebasestorage.app",
+  messagingSenderId: "479772888073",
+  appId: "1:479772888073:web:825ff0aa4b4da1efac3cd8"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+if (isSignInWithEmailLink(auth, window.location.href)) {
+  let email = window.localStorage.getItem('emailForSignIn');
+  if (!email) email = window.prompt('Please confirm your email:');
+  signInWithEmailLink(auth, email, window.location.href)
+    .then(() => window.localStorage.removeItem('emailForSignIn'))
+    .catch(() => showError('Link expired. Please try again.'));
+}
+
+onAuthStateChanged(auth, (user) => {
+  if (user) window.location.href = 'byp-app.html';
+});
+
+document.getElementById('googleBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('googleBtn');
+  hideError();
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" style="animation:spin 0.8s linear infinite;flex-shrink:0"><circle cx="12" cy="12" r="9" stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-dasharray="28" stroke-dashoffset="8"/></svg> Connecting...`;
+  try {
+    await signInWithPopup(auth, provider);
+  } catch (e) {
+    btn.disabled = false;
+    btn.innerHTML = `<svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Continue with Google`;
+    if (e.code !== 'auth/popup-closed-by-user') showError('Something went wrong. Please try again.');
+  }
+});
+
+document.getElementById('emailBtn').addEventListener('click', async () => {
+  const email = document.getElementById('emailInput').value;
+  const field = document.getElementById('emailInput');
+  const btn = document.getElementById('emailBtn');
+  hideError();
+  if (!email || !email.includes('@')) { field.style.borderColor = '#e94560'; field.focus(); return; }
+  field.style.borderColor = '#c9a84c44';
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  try {
+    await sendSignInLinkToEmail(auth, email, { url: window.location.origin + '/byp-app.html', handleCodeInApp: true });
+    window.localStorage.setItem('emailForSignIn', email);
+    btn.textContent = '✓ Magic link sent — check your inbox';
+    btn.style.borderColor = '#c9a84c';
+    btn.style.color = '#c9a84c';
+  } catch (e) {
+    btn.disabled = false;
+    btn.textContent = 'Send Magic Link →';
+    showError('Could not send link. Please use Google sign-in.');
+  }
+});
+
+function showError(msg) { const el = document.getElementById('errorMsg'); el.textContent = msg; el.style.display = 'block'; }
+function hideError() { document.getElementById('errorMsg').style.display = 'none'; }
+</script>
 </body>
 </html>
