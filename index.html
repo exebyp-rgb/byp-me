@@ -1,9 +1,1535 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BYP — Build Your Price</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYP – Quick Job Quotes</title>
+    <style>
+        :root {
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --border: #e0e0e0;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --accent: #2563eb;
+            --accent-dark: #1d4ed8;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-nav-back {
+            padding: 8px 16px;
+            background: none;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all 0.15s;
+            display: none;
+        }
+
+        .btn-nav-back:hover {
+            background: var(--bg);
+        }
+
+        .btn-nav-back.show {
+            display: inline-block;
+        }
+
+        /* Main container */
+        .container {
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin-top: 50px;
+        }
+
+        .screen {
+            display: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Landing / Tool Screen */
+        .screen-landing {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .hero-title {
+            font-size: clamp(28px, 6vw, 48px);
+            font-weight: 700;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.4;
+        }
+
+        /* Form elements */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: var(--surface);
+            transition: border-color 0.15s;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Chips/suggestions */
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .chip {
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
+            white-space: nowrap;
+        }
+
+        .chip:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface);
+            border-color: var(--text-primary);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+
+        /* Quote Builder */
+        .screen-builder {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .builder-header {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+        }
+
+        .builder-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .builder-value {
+            font-size: 18px;
+            font-weight: 600;
+            word-break: break-word;
+        }
+
+        .price-input-wrapper {
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .price-symbol {
+            position: absolute;
+            left: 16px;
+            top: 12px;
+            font-size: 16px;
+            color: var(--text-secondary);
+            pointer-events: none;
+        }
+
+        .price-input-wrapper input {
+            padding-left: 32px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        /* Quote Share Screen */
+        .screen-share {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .share-confirmation {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .confirmation-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .confirmation-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .confirmation-price {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 24px 0;
+            letter-spacing: -1px;
+        }
+
+        .links-section {
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 24px;
+        }
+
+        .link-box {
+            background: var(--surface);
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .link-box:last-child {
+            margin-bottom: 0;
+        }
+
+        .link-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .link-label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .link-url {
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 600;
+            word-break: break-all;
+            color: var(--accent);
+        }
+
+        .btn-copy {
+            padding: 8px 12px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .btn-copy:hover {
+            background: var(--accent-dark);
+        }
+
+        .btn-copy.copied {
+            background: var(--success);
+        }
+
+        /* Client Quote View */
+        .screen-client {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .quote-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 32px 24px;
+            margin-bottom: 24px;
+        }
+
+        .quote-card.theme-classic {
+            border: 2px solid var(--text-primary);
+            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+        }
+
+        .quote-card.theme-bold {
+            background: linear-gradient(135deg, var(--accent) 0%, #1e40af 100%);
+            color: white;
+            border: none;
+        }
+
+        .quote-card.theme-bold .label {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .quote-card.theme-bold .value {
+            color: white;
+        }
+
+        .contractor-info {
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contractor-info.theme-bold {
+            border-bottom-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .contractor-name {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .contractor-phone {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .contractor-phone.theme-bold {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .contractor-phone a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px solid currentColor;
+        }
+
+        .contractor-phone a:hover {
+            opacity: 0.8;
+        }
+
+        .quote-item {
+            margin-bottom: 16px;
+        }
+
+        .label {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .quote-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 20px 0;
+            letter-spacing: -1px;
+        }
+
+        .quote-card.theme-bold .quote-price {
+            color: white;
+        }
+
+        .quote-card.theme-classic .quote-price {
+            color: var(--text-primary);
+        }
+
+        .theme-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            justify-content: center;
+        }
+
+        .theme-btn {
+            padding: 8px 14px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.15s;
+            text-transform: capitalize;
+        }
+
+        .theme-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .theme-btn:hover {
+            border-color: var(--accent);
+        }
+
+        .quote-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .trust-note {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            padding: 12px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #1e40af;
+            margin-top: 16px;
+            line-height: 1.4;
+        }
+
+        .what-happens {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 6px;
+            margin-top: 24px;
+            font-size: 14px;
+        }
+
+        .what-happens-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .what-happens-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .what-happens-list li {
+            padding: 4px 0;
+            color: var(--text-secondary);
+        }
+
+        .what-happens-list li::before {
+            content: '• ';
+            color: var(--accent);
+            font-weight: 700;
+            margin-right: 8px;
+        }
+
+        /* Manage Screen */
+        .screen-manage {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .manage-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: var(--success);
+            color: white;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin: 16px 0;
+        }
+
+        .status-badge.created {
+            background: var(--accent);
+        }
+
+        .status-time {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+        }
+
+        .manage-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+
+        /* Recent Quotes */
+        .screen-recent {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .recent-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .recent-item {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .recent-item:hover {
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .recent-info {
+            flex: 1;
+        }
+
+        .recent-job {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .recent-price {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .recent-status {
+            font-size: 12px;
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Profile Save */
+        .screen-profile {
+            padding: 40px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            justify-content: flex-start;
+        }
+
+        .profile-header {
+            margin-bottom: 24px;
+        }
+
+        .profile-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .profile-header p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Accept State */
+        .accept-status {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .accept-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .accept-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .accept-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .nav {
+                padding: 12px 16px;
+            }
+
+            .screen-landing,
+            .screen-builder,
+            .screen-share,
+            .screen-client,
+            .screen-manage,
+            .screen-recent,
+            .screen-profile {
+                padding: 24px 16px;
+            }
+
+            .hero-title {
+                font-size: 28px;
+            }
+
+            .quote-price {
+                font-size: 32px;
+            }
+
+            .confirmation-price {
+                font-size: 32px;
+            }
+
+            .btn {
+                font-size: 14px;
+            }
+
+            textarea {
+                font-size: 16px;
+            }
+        }
+
+        /* Copy feedback */
+        .copy-feedback {
+            position: fixed;
+            bottom: 24px;
+            left: 24px;
+            right: 24px;
+            max-width: 300px;
+            margin: 0 auto;
+            background: var(--success);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 2000;
+            display: none;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .copy-feedback.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="#" class="nav-brand" onclick="app.reset(); return false;">BYP</a>
+        <div class="nav-actions">
+            <button class="btn-nav-back" onclick="app.goBack();">← Back</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Landing Screen -->
+        <div id="landing" class="screen active screen-landing">
+            <h1 class="hero-title">Need a quick quote for this job?<br><span style="color: var(--text-secondary);">Create it in about 30 seconds.</span></h1>
+            
+            <form onsubmit="app.startQuote(event)">
+                <div class="form-group">
+                    <label for="jobInput">Describe the job</label>
+                    <textarea id="jobInput" placeholder="Describe the job..." autofocus></textarea>
+                    <div class="chips">
+                        <div class="chip" onclick="app.selectChip(this)">Replace faucet</div>
+                        <div class="chip" onclick="app.selectChip(this)">Install toilet</div>
+                        <div class="chip" onclick="app.selectChip(this)">Paint bedroom</div>
+                        <div class="chip" onclick="app.selectChip(this)">Fix drywall hole</div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Generate Quote</button>
+            </form>
+        </div>
+
+        <!-- Quote Builder Screen -->
+        <div id="builder" class="screen screen-builder">
+            <div class="builder-header">
+                <div class="builder-label">Job</div>
+                <div class="builder-value" id="builderJob"></div>
+            </div>
+
+            <form onsubmit="app.createQuote(event)">
+                <div class="form-group">
+                    <label for="priceInput">Price</label>
+                    <div class="price-input-wrapper">
+                        <span class="price-symbol">$</span>
+                        <input type="number" id="priceInput" placeholder="0.00" step="0.01" min="0" autofocus>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="availabilitySelect">Earliest availability <span style="font-weight: 400; color: var(--text-secondary);">(optional)</span></label>
+                    <select id="availabilitySelect">
+                        <option value="">No preference</option>
+                        <option value="Today">Today</option>
+                        <option value="Tomorrow morning">Tomorrow morning</option>
+                        <option value="Tomorrow afternoon">Tomorrow afternoon</option>
+                        <option value="This week">This week</option>
+                        <option value="By arrangement">By arrangement</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Send Quote</button>
+                <button type="button" class="btn btn-secondary" onclick="app.goBack();">Edit job description</button>
+            </form>
+        </div>
+
+        <!-- Quote Created / Share Screen -->
+        <div id="share" class="screen screen-share">
+            <div class="share-confirmation">
+                <div class="confirmation-icon">✓</div>
+                <div class="confirmation-title">Quote created</div>
+                <div class="confirmation-price" id="sharePrice">$0</div>
+                <div class="builder-value" id="shareJob" style="margin-bottom: 12px;"></div>
+            </div>
+
+            <div class="links-section">
+                <div style="margin-bottom: 16px; font-size: 12px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Your links</div>
+                
+                <div class="link-box">
+                    <div class="link-info">
+                        <div class="link-label">Client link (share this)</div>
+                        <div class="link-url" id="clientLinkDisplay">byp.me/q/...</div>
+                    </div>
+                    <button type="button" class="btn-copy" onclick="app.copyLink('client')">Copy</button>
+                </div>
+
+                <div class="link-box">
+                    <div class="link-info">
+                        <div class="link-label">Your manage link (keep private)</div>
+                        <div class="link-url" id="manageLinkDisplay">byp.me/m/...</div>
+                    </div>
+                    <button type="button" class="btn-copy" onclick="app.copyLink('manage')">Copy</button>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" onclick="app.copyReplyText();">Copy reply text</button>
+            <button type="button" class="btn btn-secondary" onclick="app.goToRecent();">View recent quotes</button>
+
+            <div style="background: #f0f9ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 4px; margin-top: 24px; font-size: 13px; color: #1e40af; line-height: 1.5;">
+                This device will remember your recent quotes.
+            </div>
+        </div>
+
+        <!-- Client Quote View -->
+        <div id="client" class="screen screen-client">
+            <div style="margin-bottom: 20px;">
+                <div class="theme-toggle">
+                    <button class="theme-btn active" onclick="app.setTheme('clean')">Clean</button>
+                    <button class="theme-btn" onclick="app.setTheme('classic')">Classic</button>
+                    <button class="theme-btn" onclick="app.setTheme('bold')">Bold</button>
+                </div>
+            </div>
+
+            <div id="quoteCard" class="quote-card">
+                <div class="contractor-info">
+                    <div class="contractor-name" id="clientContractorName">Your Service</div>
+                    <div class="contractor-phone" id="clientContractorPhone"></div>
+                </div>
+
+                <div class="quote-item">
+                    <div class="label">Job</div>
+                    <div class="value" id="clientJobDisplay"></div>
+                </div>
+
+                <div class="label" style="margin-top: 16px;">Total price</div>
+                <div class="quote-price" id="clientPriceDisplay">$0</div>
+
+                <div id="clientAvailabilityDisplay" class="quote-item" style="display: none;">
+                    <div class="label">Earliest availability</div>
+                    <div class="value" id="clientAvailability"></div>
+                </div>
+
+                <div class="quote-actions">
+                    <button class="btn btn-primary" onclick="app.acceptQuote();" id="acceptBtn">Accept Quote</button>
+                    <button class="btn btn-secondary" id="callBtn">☎ Call Contractor</button>
+                </div>
+
+                <div class="trust-note">
+                    No payment now. Call or message to confirm timing.
+                </div>
+
+                <div class="what-happens">
+                    <div class="what-happens-title">What happens next</div>
+                    <ul class="what-happens-list">
+                        <li>Confirm the quote</li>
+                        <li>Call or message to finalize timing</li>
+                        <li>Payment after completion</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Accept Quote Screen -->
+        <div id="accepted" class="screen screen-client">
+            <div class="accept-status">
+                <div class="accept-icon">✓</div>
+                <div class="accept-title">Quote accepted</div>
+                <div class="accept-message">Call or message the contractor to confirm timing.</div>
+            </div>
+
+            <div style="background: var(--bg); padding: 24px 16px; border-radius: 6px; margin-bottom: 24px;">
+                <div class="label">Total price</div>
+                <div class="quote-price" id="acceptPriceDisplay" style="text-align: center;">$0</div>
+                <div style="font-size: 14px; color: var(--text-secondary); text-align: center; margin-top: 12px;" id="acceptJobDisplay"></div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="acceptCallBtn">☎ Call Contractor</button>
+        </div>
+
+        <!-- Contractor Manage Screen -->
+        <div id="manage" class="screen screen-manage">
+            <div class="manage-header">
+                <div style="font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; margin-bottom: 12px;">Quote status</div>
+                <div class="builder-value" id="manageJobDisplay"></div>
+                <div class="status-badge" id="manageBadge">Created</div>
+                <div class="status-time" id="manageTime"></div>
+            </div>
+
+            <div class="manage-card">
+                <div class="label">Total price</div>
+                <div style="font-size: 24px; font-weight: 700; margin: 8px 0; color: var(--accent);" id="managePriceDisplay">$0</div>
+            </div>
+
+            <div class="manage-card">
+                <div class="label">Full details</div>
+                <div style="margin-top: 8px; font-size: 14px;">
+                    <div style="margin-bottom: 12px;">
+                        <div class="label">Job</div>
+                        <div style="font-size: 16px; color: var(--text-primary);" id="manageFullJob"></div>
+                    </div>
+                    <div id="manageAvailabilityWrapper" style="display: none;">
+                        <div class="label">Earliest availability</div>
+                        <div style="font-size: 16px; color: var(--text-primary);" id="manageAvailability"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-secondary" onclick="app.reset();">Create new quote</button>
+        </div>
+
+        <!-- Recent Quotes Screen -->
+        <div id="recent" class="screen screen-recent">
+            <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 24px;">Recent quotes</h2>
+            <div id="recentList" class="recent-list"></div>
+            <button type="button" class="btn btn-secondary" onclick="app.reset(); return false;">Create new quote</button>
+        </div>
+
+        <!-- Profile Save Screen -->
+        <div id="profile" class="screen screen-profile">
+            <div class="profile-header">
+                <h2>Save your details</h2>
+                <p>Fill in your info for faster quotes</p>
+            </div>
+
+            <form onsubmit="app.saveProfile(event)">
+                <div class="form-group">
+                    <label for="profileName">Name</label>
+                    <input type="text" id="profileName" placeholder="Your name">
+                </div>
+
+                <div class="form-group">
+                    <label for="profileBusiness">Business name</label>
+                    <input type="text" id="profileBusiness" placeholder="Business name (optional)">
+                </div>
+
+                <div class="form-group">
+                    <label for="profilePhone">Phone</label>
+                    <input type="tel" id="profilePhone" placeholder="(123) 456-7890">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save details</button>
+                <button type="button" class="btn btn-secondary" onclick="app.goToRecent();">Skip for now</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="copy-feedback" id="copyFeedback">Copied to clipboard!</div>
+
+    <script>
+        // BYP App - Minimal MVP Implementation
+        // State machine for quote creation and sharing flow
+
+        const app = {
+            state: {
+                currentScreen: 'landing',
+                currentJob: '',
+                currentPrice: '',
+                currentAvailability: '',
+                currentTheme: 'clean',
+                currentQuoteId: '',
+                currentManageToken: '',
+                isAccepted: false,
+                profile: {}
+            },
+
+            // ===== INITIALIZATION =====
+            init() {
+                this.loadProfile();
+                this.loadRecentQuotes();
+                this.checkUrlHash();
+                this.attachEventListeners();
+                console.log('✓ BYP App initialized');
+            },
+
+            attachEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && this.state.currentScreen !== 'landing') {
+                        this.goBack();
+                    }
+                });
+            },
+
+            // ===== NAVIGATION =====
+            showScreen(screenName) {
+                // Hide all screens
+                document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+                
+                // Show target screen
+                const screen = document.getElementById(screenName);
+                if (screen) {
+                    screen.classList.add('active');
+                    this.state.currentScreen = screenName;
+                    this.updateNav();
+                    
+                    // Scroll to top
+                    screen.scrollTop = 0;
+                }
+            },
+
+            updateNav() {
+                const backBtn = document.querySelector('.btn-nav-back');
+                const showBreadcrumb = this.state.currentScreen !== 'landing' && 
+                                       this.state.currentScreen !== 'recent' &&
+                                       this.state.currentScreen !== 'profile';
+                
+                if (showBreadcrumb) {
+                    backBtn.classList.add('show');
+                } else {
+                    backBtn.classList.remove('show');
+                }
+            },
+
+            goBack() {
+                // Intelligent back navigation
+                if (this.state.currentScreen === 'builder') {
+                    this.showScreen('landing');
+                } else if (this.state.currentScreen === 'share') {
+                    this.showScreen('builder');
+                } else if (this.state.currentScreen === 'client' || this.state.currentScreen === 'accepted') {
+                    this.showScreen('landing');
+                } else if (this.state.currentScreen === 'manage') {
+                    this.showScreen('landing');
+                } else if (this.state.currentScreen === 'profile') {
+                    this.goToRecent();
+                } else {
+                    this.reset();
+                }
+            },
+
+            reset() {
+                this.state = {
+                    ...this.state,
+                    currentScreen: 'landing',
+                    currentJob: '',
+                    currentPrice: '',
+                    currentAvailability: '',
+                    currentTheme: 'clean',
+                    currentQuoteId: '',
+                    currentManageToken: '',
+                    isAccepted: false
+                };
+                this.showScreen('landing');
+                document.getElementById('jobInput').value = '';
+            },
+
+            // ===== QUOTE CREATION FLOW =====
+            selectChip(element) {
+                const text = element.textContent.trim();
+                document.getElementById('jobInput').value = text;
+                document.getElementById('jobInput').focus();
+            },
+
+            startQuote(event) {
+                event.preventDefault();
+                const job = document.getElementById('jobInput').value.trim();
+                
+                if (!job) {
+                    alert('Please describe the job.');
+                    return;
+                }
+                
+                this.state.currentJob = job;
+                this.showScreen('builder');
+                document.getElementById('builderJob').textContent = job;
+                document.getElementById('priceInput').focus();
+            },
+
+            createQuote(event) {
+                event.preventDefault();
+                const price = document.getElementById('priceInput').value.trim();
+                const availability = document.getElementById('availabilitySelect').value;
+                
+                if (!price) {
+                    alert('Please enter a price.');
+                    return;
+                }
+                
+                this.state.currentPrice = price;
+                this.state.currentAvailability = availability;
+                
+                // Generate IDs
+                this.state.currentQuoteId = this.generateId();
+                this.state.currentManageToken = this.generateToken();
+                
+                // Save to localStorage
+                this.saveQuote();
+                
+                // Show share screen
+                this.showShare();
+            },
+
+            showShare() {
+                document.getElementById('sharePrice').textContent = '$' + this.formatPrice(this.state.currentPrice);
+                document.getElementById('shareJob').textContent = this.state.currentJob;
+                document.getElementById('clientLinkDisplay').textContent = `byp.me/q/${this.state.currentQuoteId}`;
+                document.getElementById('manageLinkDisplay').textContent = `byp.me/m/${this.state.currentManageToken}`;
+                
+                this.showScreen('share');
+            },
+
+            // ===== QUOTE LINKING & SHARING =====
+            copyLink(type) {
+                const linkMap = {
+                    'client': `byp.me/q/${this.state.currentQuoteId}`,
+                    'manage': `byp.me/m/${this.state.currentManageToken}`
+                };
+                
+                navigator.clipboard.writeText(linkMap[type]).then(() => {
+                    this.showCopyFeedback();
+                });
+            },
+
+            copyReplyText() {
+                const text = `Here's the quote for the job:\nbyp.me/q/${this.state.currentQuoteId}`;
+                navigator.clipboard.writeText(text).then(() => {
+                    this.showCopyFeedback();
+                });
+            },
+
+            showCopyFeedback() {
+                const feedback = document.getElementById('copyFeedback');
+                feedback.classList.add('show');
+                setTimeout(() => {
+                    feedback.classList.remove('show');
+                }, 2000);
+            },
+
+            // ===== CLIENT VIEW =====
+            showClientQuote(quoteId) {
+                const quote = this.getQuoteById(quoteId);
+                
+                if (!quote) {
+                    alert('Quote not found.');
+                    return;
+                }
+                
+                this.state.currentQuoteId = quoteId;
+                this.state.isAccepted = quote.status === 'accepted';
+                
+                document.getElementById('clientJobDisplay').textContent = quote.job;
+                document.getElementById('clientPriceDisplay').textContent = '$' + this.formatPrice(quote.price);
+                
+                // Contract info (try to use saved profile)
+                const profile = this.loadProfile();
+                const contractorName = profile.business || profile.name || 'Your Service';
+                const contractorPhone = profile.phone || '(123) 456-7890';
+                
+                document.getElementById('clientContractorName').textContent = contractorName;
+                
+                const phoneLink = this.createTelLink(contractorPhone);
+                document.getElementById('clientContractorPhone').innerHTML = phoneLink;
+                document.getElementById('callBtn').onclick = () => window.location.href = `tel:${contractorPhone.replace(/\D/g, '')}`;
+                
+                if (quote.availability) {
+                    document.getElementById('clientAvailabilityDisplay').style.display = 'block';
+                    document.getElementById('clientAvailability').textContent = quote.availability;
+                } else {
+                    document.getElementById('clientAvailabilityDisplay').style.display = 'none';
+                }
+                
+                if (this.state.isAccepted) {
+                    this.showAcceptedState();
+                } else {
+                    this.showScreen('client');
+                }
+            },
+
+            acceptQuote() {
+                const quote = this.getQuoteById(this.state.currentQuoteId);
+                if (quote) {
+                    quote.status = 'accepted';
+                    quote.acceptedAt = new Date().toISOString();
+                    this.updateQuote(quote);
+                    this.state.isAccepted = true;
+                    
+                    document.getElementById('acceptPriceDisplay').textContent = '$' + this.formatPrice(quote.price);
+                    document.getElementById('acceptJobDisplay').textContent = quote.job;
+                    
+                    const profile = this.loadProfile();
+                    const contractorPhone = profile.phone || '(123) 456-7890';
+                    document.getElementById('acceptCallBtn').onclick = () => window.location.href = `tel:${contractorPhone.replace(/\D/g, '')}`;
+                    
+                    this.showScreen('accepted');
+                }
+            },
+
+            showAcceptedState() {
+                const quote = this.getQuoteById(this.state.currentQuoteId);
+                if (quote) {
+                    document.getElementById('acceptPriceDisplay').textContent = '$' + this.formatPrice(quote.price);
+                    document.getElementById('acceptJobDisplay').textContent = quote.job;
+                    
+                    const profile = this.loadProfile();
+                    const contractorPhone = profile.phone || '(123) 456-7890';
+                    document.getElementById('acceptCallBtn').onclick = () => window.location.href = `tel:${contractorPhone.replace(/\D/g, '')}`;
+                    
+                    this.showScreen('accepted');
+                }
+            },
+
+            setTheme(theme) {
+                this.state.currentTheme = theme;
+                
+                // Update button states
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                event.target.classList.add('active');
+                
+                // Update card theme
+                const card = document.getElementById('quoteCard');
+                card.className = 'quote-card theme-' + theme;
+                
+                const contractorInfo = card.querySelector('.contractor-info');
+                contractorInfo.className = 'contractor-info' + (theme !== 'clean' ? ' theme-' + theme : '');
+                
+                document.querySelectorAll('.contractor-phone').forEach(el => {
+                    el.className = 'contractor-phone' + (theme !== 'clean' ? ' theme-' + theme : '');
+                });
+            },
+
+            // ===== CONTRACTOR MANAGE VIEW =====
+            showManageQuote(manageToken) {
+                const quote = this.getQuoteByToken(manageToken);
+                
+                if (!quote) {
+                    alert('Quote not found.');
+                    return;
+                }
+                
+                this.state.currentQuoteId = quote.id;
+                this.state.currentManageToken = manageToken;
+                
+                document.getElementById('manageJobDisplay').textContent = quote.job;
+                document.getElementById('managePriceDisplay').textContent = '$' + this.formatPrice(quote.price);
+                document.getElementById('manageFullJob').textContent = quote.job;
+                
+                const badge = document.getElementById('manageBadge');
+                badge.textContent = quote.status === 'accepted' ? '✓ Accepted' : 'Created';
+                badge.className = 'status-badge ' + (quote.status === 'accepted' ? 'success' : 'created');
+                
+                if (quote.status === 'accepted') {
+                    badge.className = 'status-badge';
+                    badge.style.background = 'var(--success)';
+                }
+                
+                const timeEl = document.getElementById('manageTime');
+                if (quote.status === 'accepted' && quote.acceptedAt) {
+                    const acceptedTime = this.getTimeAgo(new Date(quote.acceptedAt));
+                    timeEl.textContent = `Accepted ${acceptedTime} ago`;
+                } else {
+                    const createdTime = this.getTimeAgo(new Date(quote.createdAt));
+                    timeEl.textContent = `Created ${createdTime} ago`;
+                }
+                
+                if (quote.availability) {
+                    document.getElementById('manageAvailabilityWrapper').style.display = 'block';
+                    document.getElementById('manageAvailability').textContent = quote.availability;
+                } else {
+                    document.getElementById('manageAvailabilityWrapper').style.display = 'none';
+                }
+                
+                this.showScreen('manage');
+            },
+
+            // ===== RECENT QUOTES =====
+            goToRecent() {
+                this.showRecent();
+                this.showScreen('recent');
+            },
+
+            showRecent() {
+                const quotes = this.getRecentQuotes();
+                const container = document.getElementById('recentList');
+                
+                if (quotes.length === 0) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); font-size: 14px;">No recent quotes yet.</p>';
+                    return;
+                }
+                
+                container.innerHTML = quotes.map(q => `
+                    <div class="recent-item" onclick="app.showSpecificQuote('${q.id}');">
+                        <div class="recent-info">
+                            <div class="recent-job">${q.job}</div>
+                            <div class="recent-price">$${this.formatPrice(q.price)}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="recent-status">${q.status === 'accepted' ? '✓ Accepted' : 'Created'}</div>
+                            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">${this.getTimeAgo(new Date(q.createdAt))} ago</div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            showSpecificQuote(quoteId) {
+                const quote = this.getQuoteById(quoteId);
+                if (quote) {
+                    this.state.currentManageToken = quote.manageToken;
+                    this.showManageQuote(quote.manageToken);
+                }
+            },
+
+            // ===== PROFILE SAVING =====
+            saveProfile(event) {
+                if (event) event.preventDefault();
+                
+                const profile = {
+                    name: document.getElementById('profileName').value.trim() || '',
+                    business: document.getElementById('profileBusiness').value.trim() || '',
+                    phone: document.getElementById('profilePhone').value.trim() || ''
+                };
+                
+                localStorage.setItem('byp_profile', JSON.stringify(profile));
+                this.state.profile = profile;
+                
+                this.goToRecent();
+            },
+
+            loadProfile() {
+                try {
+                    const saved = localStorage.getItem('byp_profile');
+                    if (saved) {
+                        this.state.profile = JSON.parse(saved);
+                        return this.state.profile;
+                    }
+                } catch (e) {
+                    console.error('Error loading profile:', e);
+                }
+                return {};
+            },
+
+            // ===== QUOTE PERSISTENCE =====
+            saveQuote(quoteOverride = null) {
+                const quote = quoteOverride || {
+                    id: this.state.currentQuoteId,
+                    manageToken: this.state.currentManageToken,
+                    job: this.state.currentJob,
+                    price: this.state.currentPrice,
+                    availability: this.state.currentAvailability,
+                    status: 'created',
+                    createdAt: new Date().toISOString()
+                };
+                
+                let quotes = this.getRecentQuotes();
+                
+                // Remove if update
+                quotes = quotes.filter(q => q.id !== quote.id);
+                
+                // Add to front
+                quotes.unshift(quote);
+                
+                // Keep last 20
+                quotes = quotes.slice(0, 20);
+                
+                localStorage.setItem('byp_quotes', JSON.stringify(quotes));
+            },
+
+            updateQuote(quote) {
+                let quotes = this.getRecentQuotes();
+                const index = quotes.findIndex(q => q.id === quote.id);
+                if (index >= 0) {
+                    quotes[index] = quote;
+                    localStorage.setItem('byp_quotes', JSON.stringify(quotes));
+                }
+            },
+
+            getQuoteById(quoteId) {
+                const quotes = this.getRecentQuotes();
+                return quotes.find(q => q.id === quoteId);
+            },
+
+            getQuoteByToken(token) {
+                const quotes = this.getRecentQuotes();
+                return quotes.find(q => q.manageToken === token);
+            },
+
+            getRecentQuotes() {
+                try {
+                    const saved = localStorage.getItem('byp_quotes');
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Error loading quotes:', e);
+                }
+                return [];
+            },
+
+            loadRecentQuotes() {
+                try {
+                    const saved = localStorage.getItem('byp_quotes');
+                    if (saved) {
+                        return JSON.parse(saved);
+                    }
+                } catch (e) {
+                    console.error('Error loading recent quotes:', e);
+                }
+                return [];
+            },
+
+            // ===== URL ROUTING =====
+            checkUrlHash() {
+                const hash = window.location.hash.substring(1);
+                
+                if (hash.startsWith('q/')) {
+                    // Client view
+                    const quoteId = hash.substring(2);
+                    this.showClientQuote(quoteId);
+                } else if (hash.startsWith('m/')) {
+                    // Manage view
+                    const manageToken = hash.substring(2);
+                    this.showManageQuote(manageToken);
+                }
+            },
+
+            // ===== UTILITIES =====
+            generateId() {
+                return Math.random().toString(36).substring(2, 9);
+            },
+
+            generateToken() {
+                return Math.random().toString(36).substring(2, 15) + 
+                       Math.random().toString(36).substring(2, 15);
+            },
+
+            formatPrice(price) {
+                const num = parseFloat(price);
+                return num.toFixed(2);
+            },
+
+            getTimeAgo(date) {
+                const now = new Date();
+                const diff = now - date;
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                
+                if (seconds < 60) return 'now';
+                if (minutes < 60) return `${minutes}m`;
+                if (hours < 24) return `${hours}h`;
+                if (days < 7) return `${days}d`;
+                
+                return date.toLocaleDateString();
+            },
+
+            createTelLink(phone) {
+                const cleaned = phone.replace(/\D/g, '');
+                return `<a href="tel:+1${cleaned}">${phone}</a>`;
+            }
+        };
+
+        // Hash change listener for back button
+        window.addEventListener('hashchange', () => {
+            app.checkUrlHash();
+        });
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+
+
 <meta name="description" content="Create a professional quote in 30 seconds. Send a link. Win the job."/>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,900&family=JetBrains+Mono:wght@400;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
