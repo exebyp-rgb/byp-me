@@ -63,6 +63,85 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:'Barlo
 }
 .screen-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
+.intro-card{
+  background:linear-gradient(135deg,#111824 0%,#0d131b 100%);
+  border:1px solid var(--border2);
+  border-radius:8px;
+  padding:14px 14px 12px;
+  margin-bottom:18px;
+}
+.intro-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.intro-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:25px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:var(--white);
+}
+.intro-title span{color:var(--gold);}
+.auth-pill{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  border-radius:999px;
+  padding:5px 9px;
+  border:1px solid var(--border2);
+  color:var(--dim);
+  background:rgba(17,24,36,.85);
+  white-space:nowrap;
+}
+.auth-pill.live{
+  color:var(--green);
+  border-color:rgba(11,194,112,.35);
+  background:rgba(11,194,112,.09);
+}
+.intro-sub{
+  font-size:14px;
+  color:var(--dim);
+  line-height:1.55;
+}
+.intro-sub strong{color:var(--white);font-weight:600;}
+.intro-auth-row{
+  margin-top:12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.intro-auth-copy{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.4px;
+  color:var(--faint);
+  line-height:1.5;
+}
+.btn-auth{
+  background:none;
+  border:1px solid var(--border2);
+  color:var(--white);
+  border-radius:4px;
+  padding:8px 10px;
+  cursor:pointer;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+  transition:all .15s;
+  flex-shrink:0;
+}
+.btn-auth:hover{border-color:var(--gold);color:var(--gold);}
+
 /* field label */
 .lbl{
   font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;
@@ -326,6 +405,20 @@ textarea.inp{resize:none;min-height:72px;line-height:1.5;}
 <div class="screen" id="screenForm">
   <div class="screen-title">New Quote</div>
 
+  <div class="intro-card">
+    <div class="intro-top">
+      <div class="intro-title">Build quote. <span>Send fast.</span></div>
+      <div class="auth-pill" id="authPill">Guest mode</div>
+    </div>
+    <p class="intro-sub">
+      Create your first quote now with <strong>no login required</strong>. Google sign-in stays optional for syncing quotes and contractor details across devices.
+    </p>
+    <div class="intro-auth-row">
+      <div class="intro-auth-copy" id="authCopy">Saved on this device.</div>
+      <button class="btn-auth" type="button" id="authActionBtn">Sign in</button>
+    </div>
+  </div>
+
   <!-- Job description -->
   <div class="field">
     <label class="lbl" for="jobDesc">Job description</label>
@@ -430,16 +523,48 @@ const cfg = {
 
 initializeApp(cfg);
 const auth = getAuth();
+let initialized = false;
 
 onAuthStateChanged(auth, user => {
   document.getElementById('splash').style.display = 'none';
-  if (!user) { window.location.href = 'byp-login.html'; return; }
-  window.__userEmail = user.email;
-  initApp();
+  window.__userEmail = user ? user.email : '';
+  updateAuthUI(Boolean(user));
+  if (!initialized) {
+    initApp();
+    initialized = true;
+  }
 });
 
-document.getElementById('signoutBtn').onclick = () =>
-  signOut(auth).then(() => window.location.href = 'byp-login.html');
+document.getElementById('signoutBtn').onclick = () => {
+  if (!window.__userEmail) {
+    window.location.href = 'byp-login.html';
+    return;
+  }
+  signOut(auth).catch(() => {});
+};
+
+function updateAuthUI(isLoggedIn) {
+  const topBtn = document.getElementById('signoutBtn');
+  const pill = document.getElementById('authPill');
+  const copy = document.getElementById('authCopy');
+  const actionBtn = document.getElementById('authActionBtn');
+
+  if (isLoggedIn) {
+    topBtn.textContent = 'Sign out';
+    pill.textContent = 'Sync on';
+    pill.classList.add('live');
+    copy.textContent = window.__userEmail || 'Connected to Google account';
+    actionBtn.textContent = 'Manage';
+    actionBtn.onclick = () => window.location.href = 'byp-onboard.html';
+  } else {
+    topBtn.textContent = 'Sign in';
+    pill.textContent = 'Guest mode';
+    pill.classList.remove('live');
+    copy.textContent = 'Saved on this device.';
+    actionBtn.textContent = 'Sign in';
+    actionBtn.onclick = () => window.location.href = 'byp-login.html';
+  }
+}
 </script>
 
 <script>
@@ -599,7 +724,7 @@ function createQuote() {
 
   // build & save quote data
   const contractor = JSON.parse(localStorage.getItem('byp_contractor') || '{}');
-  const quoteData = { qn, desc, lines, total, contractor, ts: Date.now() };
+  const quoteData = { qn, desc, lines, total, contractor, owner: window.__userEmail || null, ts: Date.now() };
   const all = JSON.parse(localStorage.getItem('byp_quotes') || '[]');
   all.unshift(quoteData);
   localStorage.setItem('byp_quotes', JSON.stringify(all.slice(0, 50)));
