@@ -2,19 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <title>BYP – Quick Job Quotes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=JetBrains+Mono:wght@400;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f8f9fa;
-            --surface: #ffffff;
-            --border: #e0e0e0;
-            --text-primary: #1a1a1a;
-            --text-secondary: #666666;
-            --accent: #2563eb;
-            --accent-dark: #1d4ed8;
-            --success: #10b981;
-            --danger: #ef4444;
+            --bg: #07090d;
+            --surface: #0b0e14;
+            --card: #0f1419;
+            --border: #18222e;
+            --border2: #1f2e3d;
+            --text-primary: #edf2f7;
+            --text-secondary: #637585;
+            --faint: #2b3a48;
+            --accent: #f5a100;
+            --accent-dark: #e09000;
+            --success: #0bc270;
+            --danger: #e8394a;
+            --blue: #1e7fff;
         }
 
         * {
@@ -23,10 +28,13 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background-color: var(--bg);
+        html, body {
+            height: 100%;
+            background: var(--bg);
             color: var(--text-primary);
+            font-family: 'Barlow', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
             line-height: 1.6;
         }
 
@@ -36,22 +44,25 @@
             top: 0;
             left: 0;
             right: 0;
-            background: var(--surface);
+            height: 48px;
+            background: rgba(7,9,13,.97);
             border-bottom: 1px solid var(--border);
-            padding: 12px 24px;
+            padding: 0 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            backdrop-filter: blur(10px);
         }
 
         .nav-brand {
+            font-family: 'Barlow Condensed', sans-serif;
             font-size: 20px;
-            font-weight: 700;
+            font-weight: 900;
             color: var(--accent);
             text-decoration: none;
-            letter-spacing: -0.5px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
         .nav-actions {
@@ -61,19 +72,24 @@
         }
 
         .btn-nav-back {
-            padding: 8px 16px;
+            padding: 5px 10px;
             background: none;
-            border: 1px solid var(--border);
-            border-radius: 4px;
+            border: 1px solid var(--border2);
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 14px;
-            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
             transition: all 0.15s;
             display: none;
         }
 
         .btn-nav-back:hover {
-            background: var(--bg);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .btn-nav-back.show {
@@ -86,7 +102,7 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            margin-top: 50px;
+            margin-top: 48px;
         }
 
         .screen {
@@ -110,17 +126,20 @@
         }
 
         .hero-title {
-            font-size: clamp(28px, 6vw, 48px);
-            font-weight: 700;
-            margin-bottom: 8px;
-            line-height: 1.2;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(30px, 7vw, 52px);
+            font-weight: 900;
+            margin-bottom: 12px;
+            line-height: 1.05;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .hero-subtitle {
-            font-size: 18px;
+            font-size: 17px;
             color: var(--text-secondary);
             margin-bottom: 32px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         /* Form elements */
@@ -130,12 +149,13 @@
 
         label {
             display: block;
-            font-size: 13px;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
             color: var(--text-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 7px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 2.5px;
         }
 
         input[type="text"],
@@ -145,14 +165,27 @@
         textarea,
         select {
             width: 100%;
-            padding: 12px 16px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
+            padding: 13px 14px;
+            border: 1px solid var(--border2);
+            border-radius: 4px;
             font-size: 16px;
-            font-family: inherit;
+            font-family: 'Barlow', sans-serif;
+            font-weight: 500;
             color: var(--text-primary);
-            background: var(--surface);
+            background: var(--card);
             transition: border-color 0.15s;
+            -webkit-appearance: none;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: var(--faint);
+            font-weight: 400;
+        }
+
+        select option {
+            background: var(--card);
+            color: var(--text-primary);
         }
 
         input[type="text"]:focus,
@@ -162,13 +195,14 @@
         textarea:focus,
         select:focus {
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            border-color: var(--blue);
+            box-shadow: none;
         }
 
         textarea {
-            resize: vertical;
-            min-height: 80px;
+            resize: none;
+            min-height: 72px;
+            line-height: 1.5;
         }
 
         /* Chips/suggestions */
@@ -180,11 +214,15 @@
         }
 
         .chip {
-            padding: 8px 14px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            font-size: 13px;
+            padding: 7px 13px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.15s;
             white-space: nowrap;
@@ -197,28 +235,33 @@
 
         /* Buttons */
         .btn {
-            padding: 12px 24px;
+            padding: 16px 24px;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 4px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             cursor: pointer;
             transition: all 0.15s;
             text-decoration: none;
             display: inline-block;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary {
             background: var(--accent);
-            color: white;
+            color: #000;
             width: 100%;
         }
 
         .btn-primary:hover {
             background: var(--accent-dark);
             transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 8px 28px rgba(245,161,0,.25);
         }
 
         .btn-primary:active {
@@ -226,21 +269,21 @@
         }
 
         .btn-secondary {
-            background: var(--bg);
-            border: 1px solid var(--border);
+            background: none;
+            border: 1px solid var(--border2);
             color: var(--text-primary);
             width: 100%;
             margin-top: 8px;
         }
 
         .btn-secondary:hover {
-            background: var(--surface);
-            border-color: var(--text-primary);
+            border-color: var(--blue);
+            color: var(--blue);
         }
 
         .btn-small {
-            padding: 8px 16px;
-            font-size: 13px;
+            padding: 10px 16px;
+            font-size: 14px;
         }
 
         /* Quote Builder */
@@ -253,23 +296,27 @@
         }
 
         .builder-header {
-            background: var(--bg);
-            padding: 16px;
-            border-radius: 6px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            padding: 14px 16px;
+            border-radius: 4px;
             margin-bottom: 24px;
         }
 
         .builder-label {
-            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 2.5px;
+            margin-bottom: 5px;
         }
 
         .builder-value {
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
             word-break: break-word;
         }
 
@@ -280,18 +327,22 @@
 
         .price-symbol {
             position: absolute;
-            left: 16px;
-            top: 12px;
+            left: 14px;
+            top: 13px;
+            font-family: 'JetBrains Mono', monospace;
             font-size: 16px;
+            font-weight: 700;
             color: var(--text-secondary);
             pointer-events: none;
         }
 
         .price-input-wrapper input {
             padding-left: 32px;
-            font-size: 32px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 36px;
             font-weight: 700;
             letter-spacing: -1px;
+            color: var(--accent);
         }
 
         /* Quote Share Screen */
@@ -309,37 +360,48 @@
         }
 
         .confirmation-icon {
-            font-size: 48px;
-            margin-bottom: 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 44px;
+            font-weight: 900;
+            color: var(--success);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .confirmation-title {
-            font-size: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
             font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
             margin-bottom: 8px;
         }
 
         .confirmation-price {
-            font-size: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 44px;
             font-weight: 700;
             color: var(--accent);
-            margin: 24px 0;
+            margin: 20px 0 8px;
             letter-spacing: -1px;
         }
 
         .links-section {
-            background: var(--bg);
-            padding: 20px;
-            border-radius: 6px;
-            margin-bottom: 24px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            padding: 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
 
         .link-box {
             background: var(--surface);
-            padding: 16px;
+            padding: 14px;
             border: 1px solid var(--border);
             border-radius: 4px;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -356,41 +418,48 @@
         }
 
         .link-label {
-            font-size: 11px;
-            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 8px;
+            font-weight: 700;
+            color: var(--faint);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
 
         .link-url {
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 14px;
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 700;
             word-break: break-all;
-            color: var(--accent);
+            color: var(--text-primary);
         }
 
         .btn-copy {
-            padding: 8px 12px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 7px 11px;
+            background: none;
+            border: 1px solid var(--border2);
+            color: var(--text-secondary);
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             cursor: pointer;
-            font-weight: 600;
             white-space: nowrap;
             flex-shrink: 0;
-            transition: background 0.15s;
+            transition: all 0.15s;
         }
 
         .btn-copy:hover {
-            background: var(--accent-dark);
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .btn-copy.copied {
-            background: var(--success);
+            border-color: var(--success);
+            color: var(--success);
         }
 
         /* Client Quote View */
@@ -403,45 +472,49 @@
         }
 
         .quote-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 32px 24px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 6px;
+            padding: 28px 20px;
             margin-bottom: 24px;
         }
 
         .quote-card.theme-classic {
-            border: 2px solid var(--text-primary);
-            background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+            background: var(--surface);
+            border: 1px solid var(--border2);
+            border-top: 3px solid var(--accent);
         }
 
         .quote-card.theme-bold {
-            background: linear-gradient(135deg, var(--accent) 0%, #1e40af 100%);
-            color: white;
+            background: linear-gradient(135deg, var(--accent) 0%, #c87800 100%);
+            color: #000;
             border: none;
         }
 
         .quote-card.theme-bold .label {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(0, 0, 0, 0.6);
         }
 
         .quote-card.theme-bold .value {
-            color: white;
+            color: #000;
         }
 
         .contractor-info {
-            margin-bottom: 24px;
-            padding-bottom: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
 
         .contractor-info.theme-bold {
-            border-bottom-color: rgba(255, 255, 255, 0.2);
+            border-bottom-color: rgba(0, 0, 0, 0.2);
         }
 
         .contractor-name {
-            font-size: 20px;
-            font-weight: 700;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 22px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
 
@@ -451,17 +524,20 @@
         }
 
         .contractor-phone.theme-bold {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(0, 0, 0, 0.7);
         }
 
         .contractor-phone a {
-            color: inherit;
+            color: var(--blue);
             text-decoration: none;
-            border-bottom: 1px solid currentColor;
         }
 
         .contractor-phone a:hover {
             opacity: 0.8;
+        }
+
+        .quote-card.theme-bold .contractor-phone a {
+            color: rgba(0,0,0,.75);
         }
 
         .quote-item {
@@ -469,33 +545,36 @@
         }
 
         .label {
-            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
+            letter-spacing: 2.5px;
+            margin-bottom: 5px;
         }
 
         .value {
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 500;
             color: var(--text-primary);
         }
 
         .quote-price {
-            font-size: 36px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 38px;
             font-weight: 700;
             color: var(--accent);
-            margin: 20px 0;
+            margin: 16px 0;
             letter-spacing: -1px;
         }
 
         .quote-card.theme-bold .quote-price {
-            color: white;
+            color: #000;
         }
 
         .quote-card.theme-classic .quote-price {
-            color: var(--text-primary);
+            color: var(--accent);
         }
 
         .theme-toggle {
@@ -506,25 +585,33 @@
         }
 
         .theme-btn {
-            padding: 8px 14px;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            font-size: 12px;
+            padding: 7px 14px;
+            background: none;
+            border: 1px solid var(--border2);
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.15s;
-            text-transform: capitalize;
         }
 
         .theme-btn.active {
             background: var(--accent);
-            color: white;
+            color: #000;
             border-color: var(--accent);
         }
 
         .theme-btn:hover {
             border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .theme-btn.active:hover {
+            color: #000;
         }
 
         .quote-actions {
@@ -535,28 +622,36 @@
         }
 
         .trust-note {
-            background: #f0f9ff;
-            border: 1px solid #bfdbfe;
-            padding: 12px 16px;
+            background: rgba(245,161,0,.05);
+            border: 1px solid rgba(245,161,0,.18);
+            padding: 12px 14px;
             border-radius: 4px;
-            font-size: 13px;
-            color: #1e40af;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--accent);
             margin-top: 16px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .what-happens {
-            background: var(--bg);
+            background: var(--surface);
+            border: 1px solid var(--border);
             padding: 16px;
-            border-radius: 6px;
-            margin-top: 24px;
+            border-radius: 4px;
+            margin-top: 14px;
             font-size: 14px;
         }
 
         .what-happens-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
             font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
             margin-bottom: 12px;
-            color: var(--text-primary);
         }
 
         .what-happens-list {
@@ -566,15 +661,15 @@
         }
 
         .what-happens-list li {
-            padding: 4px 0;
+            padding: 5px 0;
             color: var(--text-secondary);
+            font-size: 13px;
         }
 
         .what-happens-list li::before {
-            content: '• ';
-            color: var(--accent);
+            content: '–  ';
+            color: var(--faint);
             font-weight: 700;
-            margin-right: 8px;
         }
 
         /* Manage Screen */
@@ -593,31 +688,40 @@
 
         .status-badge {
             display: inline-block;
-            padding: 8px 16px;
-            background: var(--success);
-            color: white;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
+            padding: 8px 18px;
+            background: rgba(11,194,112,.1);
+            border: 1px solid rgba(11,194,112,.25);
+            color: var(--success);
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
             margin: 16px 0;
         }
 
         .status-badge.created {
-            background: var(--accent);
+            background: rgba(245,161,0,.08);
+            border-color: rgba(245,161,0,.2);
+            color: var(--accent);
         }
 
         .status-time {
-            font-size: 13px;
-            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--faint);
             margin-top: 8px;
         }
 
         .manage-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 16px;
+            background: var(--card);
+            border: 1px solid var(--border2);
+            border-radius: 4px;
+            padding: 18px;
+            margin-bottom: 12px;
         }
 
         /* Recent Quotes */
@@ -636,20 +740,26 @@
         }
 
         .recent-item {
-            background: var(--surface);
+            background: var(--card);
             border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 16px;
+            border-radius: 4px;
+            padding: 14px;
             cursor: pointer;
             transition: all 0.15s;
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
+            align-items: center;
+            text-align: left;
+            width: 100%;
         }
 
         .recent-item:hover {
-            border-color: var(--accent);
-            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+            border-color: var(--border2);
+            background: #141d27;
+        }
+
+        .recent-item:hover .recent-status {
+            color: var(--accent);
         }
 
         .recent-info {
@@ -657,19 +767,26 @@
         }
 
         .recent-job {
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
             margin-bottom: 4px;
         }
 
         .recent-price {
-            font-size: 13px;
-            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
         }
 
         .recent-status {
-            font-size: 12px;
-            color: var(--success);
-            font-weight: 600;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text-secondary);
+            transition: color 0.15s;
         }
 
         /* Profile Save */
@@ -686,9 +803,12 @@
         }
 
         .profile-header h2 {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
         }
 
         .profile-header p {
@@ -699,22 +819,31 @@
         /* Accept State */
         .accept-status {
             text-align: center;
-            margin: 40px 0;
+            margin: 40px 0 32px;
         }
 
         .accept-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 52px;
+            font-weight: 900;
+            color: var(--success);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .accept-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 36px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--success);
+            margin-bottom: 10px;
         }
 
         .accept-message {
-            font-size: 16px;
+            font-size: 15px;
             color: var(--text-secondary);
             line-height: 1.5;
         }
@@ -760,20 +889,21 @@
         .copy-feedback {
             position: fixed;
             bottom: 24px;
-            left: 24px;
-            right: 24px;
-            max-width: 300px;
-            margin: 0 auto;
-            background: var(--success);
-            color: white;
-            padding: 12px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 2000;
-            display: none;
             left: 50%;
             transform: translateX(-50%);
+            background: var(--card);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 10px 20px;
+            border-radius: 3px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            z-index: 2000;
+            white-space: nowrap;
+            display: none;
         }
 
         .copy-feedback.show {
@@ -874,7 +1004,7 @@
             <button type="button" class="btn btn-primary" onclick="app.copyReplyText();">Copy reply text</button>
             <button type="button" class="btn btn-secondary" onclick="app.goToRecent();">View recent quotes</button>
 
-            <div style="background: #f0f9ff; border: 1px solid #bfdbfe; padding: 12px 16px; border-radius: 4px; margin-top: 24px; font-size: 13px; color: #1e40af; line-height: 1.5;">
+            <div class="trust-note">
                 This device will remember your recent quotes.
             </div>
         </div>
