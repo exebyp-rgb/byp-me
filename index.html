@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
   <title>BYP – Quick Job Quotes</title>
-  <meta name="description" content="Reply to clients with a clean job quote in 30 seconds.">
+  <meta name="description" content="Send a clean job quote link in seconds.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -13,7 +13,7 @@
 <body>
 
 <!-- ============================================================
-     MAIN PAGE (compose + result)
+     MAIN PAGE
      ============================================================ -->
 <div id="main-page">
   <div class="wrap">
@@ -24,81 +24,103 @@
       <div class="logo-sub">Quick job quotes</div>
     </header>
 
-    <!-- Client message bubble -->
-    <div class="client-bubble">
-      <div class="bubble-label">Client asked</div>
-      <div class="bubble-text">"How much to replace a kitchen faucet?"</div>
-    </div>
-
-    <!-- Reply label -->
-    <div class="reply-label">Your reply preview</div>
-
     <!-- ---- COMPOSE AREA ---- -->
     <div id="compose-area">
 
-      <!-- Quote preview card (inline editable) -->
-      <div class="quote-card">
-        <div class="card-meta">
-          <div class="contractor-block">
-            <div class="contractor-name"
-                 id="editor-name"
-                 contenteditable="true"
-                 spellcheck="false"
-                 aria-label="Contractor name">Mike – Plumbing Service</div>
-            <div class="contractor-phone">
-              ☎ <span id="editor-phone"
-                    contenteditable="true"
-                    spellcheck="false"
-                    aria-label="Phone number">512-000-4821</span>
-            </div>
+      <!-- Input card -->
+      <div class="tool-card">
+        <div class="tool-label">Quick quote</div>
+        <input
+          type="text"
+          id="quoteInput"
+          class="quote-input"
+          placeholder="replace faucet 180"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="none"
+          spellcheck="false"
+          autofocus
+        >
+        <div class="input-hint">
+          Type the job and price in one line.
+          <span class="input-hint-ex">replace faucet 180</span>
+        </div>
+      </div>
+
+      <!-- Quick price chips (appear when price is detected) -->
+      <div id="price-chips" class="price-chips" style="display:none;">
+        <span class="chips-label">Quick price</span>
+        <div class="chips-row">
+          <button class="chip" onclick="app.setPrice(150)">150</button>
+          <button class="chip" onclick="app.setPrice(180)">180</button>
+          <button class="chip" onclick="app.setPrice(200)">200</button>
+          <button class="chip" onclick="app.setPrice(220)">220</button>
+          <button class="chip" onclick="app.setPrice(250)">250</button>
+        </div>
+      </div>
+
+      <!-- Preview card (appears on input) -->
+      <div id="preview-card" class="preview-card" style="display:none;">
+
+        <!-- Identity -->
+        <div class="preview-identity">
+          <div
+            id="preview-name"
+            class="preview-name-field preview-empty"
+            contenteditable="true"
+            spellcheck="false"
+            data-placeholder="Add your name"
+          ></div>
+          <div class="preview-phone-row">
+            <span class="preview-phone-icon">&#9742;</span>
+            <div
+              id="preview-phone"
+              class="preview-phone-field preview-empty"
+              contenteditable="true"
+              spellcheck="false"
+              data-placeholder="Add your phone number"
+            ></div>
           </div>
-          <span class="edit-hint">tap to edit</span>
         </div>
 
+        <div class="preview-divider"></div>
+
         <!-- Job -->
-        <div class="job-row">
-          <div class="field-label">Job</div>
-          <div class="job-text"
-               id="editor-job"
-               contenteditable="true"
-               spellcheck="false"
-               aria-label="Job description">Kitchen faucet replacement</div>
+        <div class="preview-section">
+          <div class="preview-field-label">Job</div>
+          <div class="preview-job" id="preview-job">&mdash;</div>
         </div>
 
         <!-- Price -->
-        <div class="price-row">
-          <div class="field-label">Total</div>
-          <div class="price-display">
-            <span class="price-currency">$</span>
-            <span class="price-amount"
-                  id="editor-price"
-                  contenteditable="true"
-                  inputmode="numeric"
-                  spellcheck="false"
-                  aria-label="Price">185</span>
-          </div>
+        <div class="preview-section preview-section-price">
+          <div class="preview-field-label">Total</div>
+          <div class="preview-price" id="preview-price">&mdash;</div>
         </div>
 
         <!-- Availability -->
-        <div class="avail-row">
-          <div class="field-label">Earliest availability</div>
-          <div class="avail-text"
-               id="editor-avail"
-               contenteditable="true"
-               spellcheck="false"
-               aria-label="Availability">Tomorrow morning</div>
+        <div class="preview-section">
+          <div class="preview-field-label">Earliest availability</div>
+          <div
+            id="preview-avail"
+            class="preview-avail-field"
+            contenteditable="true"
+            spellcheck="false"
+          >Tomorrow morning</div>
         </div>
 
-        <!-- Accept preview (non-interactive, shows how client sees it) -->
-        <button class="accept-preview" tabindex="-1" aria-hidden="true">Accept Quote</button>
-      </div>
+        <!-- Accept preview button (non-interactive) -->
+        <button class="preview-accept-btn" tabindex="-1" aria-hidden="true">Accept Quote</button>
 
-      <p class="card-footer-note">Client will see this.</p>
+      </div><!-- /preview-card -->
 
-      <!-- Send button -->
-      <div class="send-area">
-        <button class="btn-send" onclick="app.sendQuote()">Send quote link</button>
-        <p class="send-note">Client receives a clean quote page instantly.</p>
+      <p class="preview-footer" id="preview-footer" style="display:none;">Client will see this.</p>
+
+      <!-- Send action -->
+      <div class="send-area" id="send-area" style="display:none;">
+        <button class="btn-send" id="btn-send" onclick="app.sendQuote()" disabled>
+          Send quote link
+        </button>
+        <p class="send-hint" id="send-hint">Add your name and phone to continue.</p>
       </div>
 
     </div><!-- /compose-area -->
@@ -106,33 +128,45 @@
     <!-- ---- RESULT AREA (shown after sending) ---- -->
     <div id="result-area" style="display:none;">
 
-      <div class="result-header">Quote ready</div>
+      <div class="result-header">
+        <span class="result-dot"></span>
+        Quote ready
+      </div>
 
       <div class="result-card">
-        <div class="result-row">
-          <div class="result-link-label">Client link</div>
-          <div class="result-link" id="result-client-link">byp.me/q/—</div>
-        </div>
-        <div class="result-row">
-          <div class="result-link-label">Manage link</div>
-          <div class="result-link" id="result-manage-link">byp.me/m/—</div>
-        </div>
-      </div>
 
-      <div class="btn-copy-group">
-        <button class="btn-copy" id="btn-copy-reply" onclick="app.copyReply()">
-          <span class="copy-label">Copy reply text</span>
-          <span class="copy-icon">⎘</span>
-        </button>
-        <button class="btn-copy" id="btn-copy-client" onclick="app.copyClientLink()">
-          <span class="copy-label">Copy client link</span>
-          <span class="copy-icon">⎘</span>
-        </button>
-        <button class="btn-copy" id="btn-copy-manage" onclick="app.copyManageLink()">
-          <span class="copy-label">Copy manage link</span>
-          <span class="copy-icon">⎘</span>
-        </button>
-      </div>
+        <div class="result-block">
+          <div class="result-block-label">Reply to client</div>
+          <div class="result-reply-copy">Here&rsquo;s the quote:</div>
+          <div class="result-link-row">
+            <span class="result-link" id="result-client-link">byp.me/q/&mdash;</span>
+            <button class="copy-icon-btn" id="btn-copy-client" onclick="app.copyClientLink()" title="Copy client link">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 11V3a1 1 0 011-1h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="copy-icon-label">Copy</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="result-divider"></div>
+
+        <div class="result-block">
+          <div class="result-block-label">Manage quote</div>
+          <div class="result-link-row">
+            <span class="result-link result-link-muted" id="result-manage-link">byp.me/m/&mdash;</span>
+            <button class="copy-icon-btn" id="btn-copy-manage" onclick="app.copyManageLink()" title="Copy manage link">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <rect x="5" y="5" width="9" height="9" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 11V3a1 1 0 011-1h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="copy-icon-label">Copy</span>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /result-card -->
 
       <button class="btn-new" onclick="app.newQuote()">+ New quote</button>
 
@@ -144,6 +178,12 @@
       <div id="recent-list"></div>
     </div>
 
+    <!-- Optional auth (secondary, bottom) -->
+    <div class="auth-row" id="auth-row">
+      <span class="auth-status" id="auth-status"></span>
+      <button class="btn-auth" id="btn-auth" onclick="app.toggleAuth()">Sign in with Google</button>
+    </div>
+
   </div><!-- /wrap -->
 </div><!-- /main-page -->
 
@@ -151,28 +191,30 @@
 <!-- ============================================================
      CLIENT QUOTE PAGE  (#q/ID)
      ============================================================ -->
-<div id="client-page" class="client-page">
+<div id="client-page" style="display:none;">
   <div class="client-wrap">
 
     <div class="client-card">
-      <div class="client-contractor-name" id="c-name">—</div>
-      <div class="client-phone">
-        <a id="c-phone-link" href="#">—</a>
+      <div class="client-name" id="c-name">&mdash;</div>
+      <div class="client-phone-row">
+        <a id="c-phone-link" href="#" class="client-phone-link">&mdash;</a>
       </div>
+
+      <div class="client-divider"></div>
 
       <div class="client-field">
         <div class="client-field-label">Job</div>
-        <div class="client-field-value" id="c-job">—</div>
+        <div class="client-field-value" id="c-job">&mdash;</div>
       </div>
 
       <div class="client-field">
         <div class="client-field-label">Total</div>
-        <div class="client-price-value" id="c-price">—</div>
+        <div class="client-price" id="c-price">&mdash;</div>
       </div>
 
-      <div class="client-field">
+      <div class="client-field" id="c-avail-row">
         <div class="client-field-label">Earliest availability</div>
-        <div class="client-avail-value" id="c-avail">—</div>
+        <div class="client-field-value" id="c-avail">&mdash;</div>
       </div>
 
       <div class="client-actions">
@@ -180,13 +222,10 @@
         <a class="btn-call" id="c-call-btn" href="#">Call Contractor</a>
       </div>
 
-      <!-- Accepted message -->
       <div class="accepted-msg" id="c-accepted-msg" style="display:none;">
-        <div>
-          <strong>Quote accepted.</strong><br>
-          Call or message the contractor to confirm timing.<br>
-          <span id="c-accepted-time" style="font-size:12px;opacity:0.8;"></span>
-        </div>
+        <strong>Quote accepted.</strong><br>
+        Call or message the contractor to confirm timing.
+        <div class="accepted-time" id="c-accepted-time"></div>
       </div>
     </div>
 
@@ -202,28 +241,30 @@
 <!-- ============================================================
      MANAGE QUOTE PAGE  (#m/TOKEN)
      ============================================================ -->
-<div id="manage-page" class="manage-page">
+<div id="manage-page" style="display:none;">
   <div class="manage-wrap">
 
-    <div class="manage-header">Manage quote</div>
+    <div class="manage-header-label">Manage quote</div>
 
     <div class="manage-card">
 
       <div class="manage-field">
         <div class="manage-field-label">Job</div>
-        <div class="manage-field-value" id="m-job">—</div>
+        <div class="manage-field-value" id="m-job">&mdash;</div>
       </div>
 
       <div class="manage-field">
         <div class="manage-field-label">Price</div>
-        <div class="manage-price" id="m-price">—</div>
+        <div class="manage-price" id="m-price">&mdash;</div>
       </div>
 
-      <div class="manage-field">
+      <div class="manage-field manage-field-last">
         <div class="manage-field-label">Status</div>
-        <span class="manage-status-created" id="m-status-created">Created</span>
-        <div class="manage-status-accepted" id="m-status-accepted">✔ Quote accepted</div>
-        <div class="manage-accepted-time" id="m-accepted-time"></div>
+        <span class="manage-status-badge" id="m-status-created">Created</span>
+        <div class="manage-status-accepted" id="m-status-accepted" style="display:none;">
+          &#x2714; Quote accepted
+          <div class="manage-accepted-time" id="m-accepted-time"></div>
+        </div>
       </div>
 
     </div>
@@ -236,5 +277,35 @@
 <div class="toast" id="toast"></div>
 
 <script src="app.js"></script>
+
+<!-- Firebase auth – optional, secondary -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+    from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCKR0f8od3fWcl_FhPE9Pe9f1V8_bxcINc",
+    authDomain: "byp-me.firebaseapp.com",
+    projectId: "byp-me",
+    storageBucket: "byp-me.firebasestorage.app",
+    messagingSenderId: "479772888073",
+    appId: "1:479772888073:web:825ff0aa4b4da1efac3cd8"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const auth = getAuth(fbApp);
+  const provider = new GoogleAuthProvider();
+
+  window._bypAuth = {
+    signIn: () => signInWithPopup(auth, provider),
+    signOut: () => signOut(auth),
+  };
+
+  onAuthStateChanged(auth, (user) => {
+    if (window.app) window.app.onAuthReady(user);
+  });
+</script>
+
 </body>
 </html>
