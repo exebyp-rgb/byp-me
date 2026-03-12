@@ -1,97 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>BYP.me - Fast Quotes for Contractors</title>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=JetBrains+Mono:wght@400;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
-<style>
-:root{
-  --bg:#07090d;
-  --surface:#0f141b;
-  --surface2:#131a24;
-  --border:#1b2531;
-  --text:#edf2f7;
-  --dim:#6a7f91;
-  --gold:#f5a100;
-  --blue:#1e7fff;
-  --green:#0bc270;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;}
-body{
-  font-family:'Barlow',sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(80vw 60vh at 100% 0%, rgba(30,127,255,.12), transparent 55%),
-    radial-gradient(70vw 60vh at 0% 100%, rgba(245,161,0,.09), transparent 50%),
-    var(--bg);
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:960px;margin:0 auto;padding:26px 18px 40px;}
-.nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:56px;}
-.logo{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:5px;color:var(--gold);text-decoration:none;}
-.nav-note{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--dim);}
-.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:stretch;}
-.panel{
-  background:linear-gradient(170deg,var(--surface2) 0%,var(--surface) 100%);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:24px;
-}
-.kicker{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--green);margin-bottom:10px;}
-h1{font-family:'Barlow Condensed',sans-serif;font-size:clamp(42px,8vw,86px);line-height:.92;font-weight:900;letter-spacing:.4px;text-transform:uppercase;margin-bottom:14px;}
-h1 .gold{color:var(--gold);}
-.sub{font-size:18px;color:var(--dim);line-height:1.55;max-width:520px;}
-.badge{display:inline-flex;align-items:center;gap:8px;margin-top:20px;padding:6px 11px;border:1px solid rgba(11,194,112,.35);border-radius:99px;background:rgba(11,194,112,.08);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--green);}
-.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
-.actions{display:flex;flex-direction:column;gap:10px;}
-.btn{display:block;width:100%;padding:16px 14px;border-radius:6px;text-align:center;text-decoration:none;transition:all .16s;}
-.btn-main{background:var(--gold);border:1px solid var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:28px;font-weight:900;letter-spacing:2px;text-transform:uppercase;color:#000;}
-.btn-main:hover{background:#ffc040;transform:translateY(-1px);}
-.btn-alt{background:none;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);}
-.btn-alt:hover{border-color:var(--blue);color:var(--blue);}
-.points{list-style:none;margin-top:18px;display:grid;gap:9px;}
-.points li{font-size:14px;color:var(--dim);display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
-.points li::before{content:'+';font-family:'JetBrains Mono',monospace;color:var(--gold);font-size:12px;line-height:1.3;}
-.foot{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1.2px;color:#4b5d6c;}
-@media (max-width:860px){
-  .hero{grid-template-columns:1fr;}
-  .wrap{padding:18px 14px 34px;}
-  .panel{padding:18px;}
-  h1{font-size:clamp(40px,16vw,72px);}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>BYP – Quick Job Quotes</title>
+  <meta name="description" content="Reply to clients with a clean job quote in 30 seconds.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
+<!-- ============================================================
+     MAIN PAGE (compose + result)
+     ============================================================ -->
+<div id="main-page">
   <div class="wrap">
-    <div class="nav">
-      <a class="logo" href="index.html">BYP</a>
-      <div class="nav-note">Before You Pay</div>
+
+    <!-- Header -->
+    <header class="site-header">
+      <div class="logo">BYP</div>
+      <div class="logo-sub">Quick job quotes</div>
+    </header>
+
+    <!-- Client message bubble -->
+    <div class="client-bubble">
+      <div class="bubble-label">Client asked</div>
+      <div class="bubble-text">"How much to replace a kitchen faucet?"</div>
     </div>
 
-    <div class="hero">
-      <section class="panel">
-        <div class="kicker">Contractor Quote Tool</div>
-        <h1>Quote Fast.<br/><span class="gold">Close Faster.</span></h1>
-        <p class="sub">Create your first quote right now without login. Google sign-in stays optional if you want to save contractor details and sync quotes across devices.</p>
-        <div class="badge">No login required for first quote</div>
-      </section>
+    <!-- Reply label -->
+    <div class="reply-label">Your reply preview</div>
 
-      <section class="panel">
-        <div class="actions">
-          <a class="btn btn-main" href="byp-app.html">Create Quote</a>
-          <a class="btn btn-alt" href="byp-login.html">Sign In With Google</a>
-          <a class="btn btn-alt" href="byp-onboard.html">Profile Setup</a>
+    <!-- ---- COMPOSE AREA ---- -->
+    <div id="compose-area">
+
+      <!-- Quote preview card (inline editable) -->
+      <div class="quote-card">
+        <div class="card-meta">
+          <div class="contractor-block">
+            <div class="contractor-name"
+                 id="editor-name"
+                 contenteditable="true"
+                 spellcheck="false"
+                 aria-label="Contractor name">Mike – Plumbing Service</div>
+            <div class="contractor-phone">
+              ☎ <span id="editor-phone"
+                    contenteditable="true"
+                    spellcheck="false"
+                    aria-label="Phone number">512-000-4821</span>
+            </div>
+          </div>
+          <span class="edit-hint">tap to edit</span>
         </div>
-        <ul class="points">
-          <li>Google authentication is kept intact and optional.</li>
-          <li>Guest mode works instantly on mobile and desktop.</li>
-          <li>Cloudflare Pages root now points to this up-to-date entry page.</li>
-        </ul>
-        <div class="foot">BYP.ME · Built for real jobsite speed</div>
-      </section>
+
+        <!-- Job -->
+        <div class="job-row">
+          <div class="field-label">Job</div>
+          <div class="job-text"
+               id="editor-job"
+               contenteditable="true"
+               spellcheck="false"
+               aria-label="Job description">Kitchen faucet replacement</div>
+        </div>
+
+        <!-- Price -->
+        <div class="price-row">
+          <div class="field-label">Total</div>
+          <div class="price-display">
+            <span class="price-currency">$</span>
+            <span class="price-amount"
+                  id="editor-price"
+                  contenteditable="true"
+                  inputmode="numeric"
+                  spellcheck="false"
+                  aria-label="Price">185</span>
+          </div>
+        </div>
+
+        <!-- Availability -->
+        <div class="avail-row">
+          <div class="field-label">Earliest availability</div>
+          <div class="avail-text"
+               id="editor-avail"
+               contenteditable="true"
+               spellcheck="false"
+               aria-label="Availability">Tomorrow morning</div>
+        </div>
+
+        <!-- Accept preview (non-interactive, shows how client sees it) -->
+        <button class="accept-preview" tabindex="-1" aria-hidden="true">Accept Quote</button>
+      </div>
+
+      <p class="card-footer-note">Client will see this.</p>
+
+      <!-- Send button -->
+      <div class="send-area">
+        <button class="btn-send" onclick="app.sendQuote()">Send quote link</button>
+        <p class="send-note">Client receives a clean quote page instantly.</p>
+      </div>
+
+    </div><!-- /compose-area -->
+
+    <!-- ---- RESULT AREA (shown after sending) ---- -->
+    <div id="result-area" style="display:none;">
+
+      <div class="result-header">Quote ready</div>
+
+      <div class="result-card">
+        <div class="result-row">
+          <div class="result-link-label">Client link</div>
+          <div class="result-link" id="result-client-link">byp.me/q/—</div>
+        </div>
+        <div class="result-row">
+          <div class="result-link-label">Manage link</div>
+          <div class="result-link" id="result-manage-link">byp.me/m/—</div>
+        </div>
+      </div>
+
+      <div class="btn-copy-group">
+        <button class="btn-copy" id="btn-copy-reply" onclick="app.copyReply()">
+          <span class="copy-label">Copy reply text</span>
+          <span class="copy-icon">⎘</span>
+        </button>
+        <button class="btn-copy" id="btn-copy-client" onclick="app.copyClientLink()">
+          <span class="copy-label">Copy client link</span>
+          <span class="copy-icon">⎘</span>
+        </button>
+        <button class="btn-copy" id="btn-copy-manage" onclick="app.copyManageLink()">
+          <span class="copy-label">Copy manage link</span>
+          <span class="copy-icon">⎘</span>
+        </button>
+      </div>
+
+      <button class="btn-new" onclick="app.newQuote()">+ New quote</button>
+
+    </div><!-- /result-area -->
+
+    <!-- ---- RECENT QUOTES ---- -->
+    <div id="recent-section" class="recent-section" style="display:none;">
+      <div class="section-label">Recent quotes</div>
+      <div id="recent-list"></div>
     </div>
+
+  </div><!-- /wrap -->
+</div><!-- /main-page -->
+
+
+<!-- ============================================================
+     CLIENT QUOTE PAGE  (#q/ID)
+     ============================================================ -->
+<div id="client-page" class="client-page">
+  <div class="client-wrap">
+
+    <div class="client-card">
+      <div class="client-contractor-name" id="c-name">—</div>
+      <div class="client-phone">
+        <a id="c-phone-link" href="#">—</a>
+      </div>
+
+      <div class="client-field">
+        <div class="client-field-label">Job</div>
+        <div class="client-field-value" id="c-job">—</div>
+      </div>
+
+      <div class="client-field">
+        <div class="client-field-label">Total</div>
+        <div class="client-price-value" id="c-price">—</div>
+      </div>
+
+      <div class="client-field">
+        <div class="client-field-label">Earliest availability</div>
+        <div class="client-avail-value" id="c-avail">—</div>
+      </div>
+
+      <div class="client-actions">
+        <button class="btn-accept" id="c-accept-btn" onclick="app.acceptQuote()">Accept Quote</button>
+        <a class="btn-call" id="c-call-btn" href="#">Call Contractor</a>
+      </div>
+
+      <!-- Accepted message -->
+      <div class="accepted-msg" id="c-accepted-msg" style="display:none;">
+        <div>
+          <strong>Quote accepted.</strong><br>
+          Call or message the contractor to confirm timing.<br>
+          <span id="c-accepted-time" style="font-size:12px;opacity:0.8;"></span>
+        </div>
+      </div>
+    </div>
+
+    <p class="client-trust">
+      No payment now.<br>
+      Call or message to confirm timing.
+    </p>
+
   </div>
+</div><!-- /client-page -->
+
+
+<!-- ============================================================
+     MANAGE QUOTE PAGE  (#m/TOKEN)
+     ============================================================ -->
+<div id="manage-page" class="manage-page">
+  <div class="manage-wrap">
+
+    <div class="manage-header">Manage quote</div>
+
+    <div class="manage-card">
+
+      <div class="manage-field">
+        <div class="manage-field-label">Job</div>
+        <div class="manage-field-value" id="m-job">—</div>
+      </div>
+
+      <div class="manage-field">
+        <div class="manage-field-label">Price</div>
+        <div class="manage-price" id="m-price">—</div>
+      </div>
+
+      <div class="manage-field">
+        <div class="manage-field-label">Status</div>
+        <span class="manage-status-created" id="m-status-created">Created</span>
+        <div class="manage-status-accepted" id="m-status-accepted">✔ Quote accepted</div>
+        <div class="manage-accepted-time" id="m-accepted-time"></div>
+      </div>
+
+    </div>
+
+  </div>
+</div><!-- /manage-page -->
+
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
 </body>
 </html>
